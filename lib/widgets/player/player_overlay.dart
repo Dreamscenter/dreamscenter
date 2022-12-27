@@ -3,12 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'progress_bar.dart';
 
 class PlayerOverlay extends StatelessWidget {
-  const PlayerOverlay({super.key});
+  final double progress;
+
+  const PlayerOverlay({super.key, required this.progress});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return Column(
+      return Center(
+          child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
@@ -20,10 +23,10 @@ class PlayerOverlay extends StatelessWidget {
                 ? constraints.maxWidth * .95
                 : constraints.maxWidth - 40,
             height: 12,
-            child: const ProgressBar(progress: .5),
+            child: ProgressBar(progress: progress),
           ),
         ],
-      );
+      ));
     });
   }
 }
