@@ -51,16 +51,18 @@ class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerUp: (_) => switchPlayback(),
       onPointerHover: (_) => updateOverlay(),
       child: MouseRegion(
         cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
         child: Stack(children: [
-          VideoPlayer(
-            onProgressed: (progress) => setState(() => this.progress = progress),
-            onPlayed: updateOverlay,
-            onPaused: updateOverlay,
-            setController: (controller) => videoPlayer = controller,
+          Listener(
+            onPointerUp: (_) => switchPlayback(),
+            child: VideoPlayer(
+              onProgressed: (progress) => setState(() => this.progress = progress),
+              onPlayed: updateOverlay,
+              onPaused: updateOverlay,
+              setController: (controller) => videoPlayer = controller,
+            ),
           ),
           AnimatedOpacity(
             opacity: showOverlay ? 1 : 0,

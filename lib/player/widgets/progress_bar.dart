@@ -40,18 +40,36 @@ class ProgressBar extends StatelessWidget {
   }
 
   mediaProgress(BuildContext context, BoxConstraints constraints) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(longestSize(context)),
-        child: Transform.translate(
-            offset: Offset(-constraints.maxWidth, 0),
-            child: OverflowBox(
-                alignment: Alignment.centerLeft,
-                maxWidth: constraints.maxWidth * 2,
-                child: Container(
-                    width: constraints.maxWidth * progress + constraints.maxWidth,
-                    decoration: BoxDecoration(
-                      color: DefaultColors.primaryDark,
-                      borderRadius: BorderRadius.circular(longestSize(context)),
-                    )))));
+    return Stack(children: [
+      Container(
+        width: constraints.maxWidth * progress,
+        height: constraints.maxWidth * progress > constraints.maxHeight
+            ? constraints.maxHeight
+            : constraints.maxWidth * progress,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(longestSize(context)),
+          boxShadow: [
+            BoxShadow(
+              color: DefaultColors.primaryDark.withOpacity(0.4),
+              spreadRadius: 1,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+      ),
+      ClipRRect(
+          borderRadius: BorderRadius.circular(longestSize(context)),
+          child: Transform.translate(
+              offset: Offset(-constraints.maxWidth, 0),
+              child: OverflowBox(
+                  alignment: Alignment.centerLeft,
+                  maxWidth: constraints.maxWidth * 2,
+                  child: Container(
+                      width: constraints.maxWidth * progress + constraints.maxWidth,
+                      decoration: BoxDecoration(
+                        color: DefaultColors.primaryDark,
+                        borderRadius: BorderRadius.circular(longestSize(context)),
+                      ))))),
+    ]);
   }
 }
