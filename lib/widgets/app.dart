@@ -1,6 +1,5 @@
+import 'package:dreamscenter/player/widgets/player.dart';
 import 'package:flutter/material.dart';
-
-import 'player/player.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

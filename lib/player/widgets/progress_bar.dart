@@ -1,7 +1,6 @@
+import 'package:dreamscenter/colors.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../colors.dart';
 
 class ProgressBar extends StatelessWidget {
   final double progress;
