@@ -3,8 +3,9 @@ import 'package:flutter/widgets.dart';
 
 class PlayerOverlay extends StatelessWidget {
   final double progress;
+  final Function(double) onSeek;
 
-  const PlayerOverlay({super.key, required this.progress});
+  const PlayerOverlay({super.key, required this.progress, required this.onSeek});
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +15,10 @@ class PlayerOverlay extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.only(
-                  bottom: constraints.maxHeight * .05 > 20
-                      ? constraints.maxHeight * .05
-                      : 20),
-              width: constraints.maxWidth * .05 > 40
-                  ? constraints.maxWidth * .95
-                  : constraints.maxWidth - 40,
-              height: 12,
-              child: ProgressBar(progress: progress),
-            ),
+                margin: EdgeInsets.only(bottom: constraints.maxHeight * .05 > 20 ? constraints.maxHeight * .05 : 20),
+                width: constraints.maxWidth * .05 > 40 ? constraints.maxWidth * .95 : constraints.maxWidth - 40,
+                height: 12,
+                child: ProgressBar(progress: progress, onSeek: onSeek)),
           ],
         ),
       );

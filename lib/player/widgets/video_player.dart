@@ -6,8 +6,7 @@ class VideoPlayer extends StatefulWidget {
   final Function(double) onProgress;
   final Function(VideoPlayerController) setController;
 
-  const VideoPlayer(
-      {super.key, required this.onProgress, required this.setController});
+  const VideoPlayer({super.key, required this.onProgress, required this.setController});
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
@@ -25,17 +24,26 @@ class _VideoPlayerState extends State<VideoPlayer> {
     player.open(network, autoStart: true);
     player.positionStream.listen((event) {
       if (event.position != null && event.duration != null) {
-        final progress =
-            event.position!.inMilliseconds / event.duration!.inMilliseconds;
+        final progress = event.position!.inMilliseconds / event.duration!.inMilliseconds;
 
         widget.onProgress(progress.isNaN ? 0 : progress);
       }
     });
 
+    getDuration() => player.position.duration?.inMilliseconds;
+
     final controller = MutableVideoPlayerController(
       getIsPaused: () => !player.playback.isPlaying,
       pauseVideo: () => player.pause(),
       playVideo: () => player.play(),
+      seekVideo: (destination) {
+        final duration = getDuration();
+        if (duration != null) {
+          player.seek(Duration(milliseconds: (duration * destination).toInt()));
+          widget.onProgress(destination);
+        }
+      },
+      getDuration: getDuration,
     );
 
     widget.setController(controller);

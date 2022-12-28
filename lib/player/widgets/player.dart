@@ -22,6 +22,10 @@ class _PlayerState extends State<Player> {
     }
   }
 
+  seek(double destination) {
+    videoPlayer.seek(destination);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -31,7 +35,7 @@ class _PlayerState extends State<Player> {
             onProgress: (progress) => setState(() => this.progress = progress),
             setController: (controller) => videoPlayer = controller,
           )),
-      PlayerOverlay(progress: progress),
+      PlayerOverlay(progress: progress, onSeek: seek),
     ]);
   }
 }
