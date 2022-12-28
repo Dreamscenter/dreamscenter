@@ -8,8 +8,8 @@ class ProgressBar extends StatelessWidget {
 
   const ProgressBar({super.key, required this.progress, required this.onSeek});
 
-  handleSeek(TapUpDetails details, BuildContext context) {
-    final width = context.size?.width;
+  handleSeek(TapUpDetails details, BuildContext progressBar) {
+    final width = progressBar.size?.width;
     if (width != null) {
       final progress = details.localPosition.dx / width;
       onSeek(progress);
@@ -19,12 +19,15 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return GestureDetector(
-          onTapUp: (details) => handleSeek(details, context),
-          child: Stack(children: [
-            _background(context),
-            _mediaProgress(context, constraints),
-          ]));
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+            onTapUp: (details) => handleSeek(details, context),
+            child: Stack(children: [
+              _background(context),
+              _mediaProgress(context, constraints),
+            ])),
+      );
     });
   }
 

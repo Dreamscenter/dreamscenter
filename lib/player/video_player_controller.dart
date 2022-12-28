@@ -1,23 +1,26 @@
 abstract class VideoPlayerController {
   abstract final bool isPaused;
-  abstract final int? duration;
+  abstract final Duration? currentPosition;
+  abstract final Duration? duration;
 
   pause();
 
   play();
 
-  seek(double destination);
+  seek(double percentage);
 }
 
 class MutableVideoPlayerController extends VideoPlayerController {
   bool Function() getIsPaused;
-  int? Function() getDuration;
+  Duration? Function() getCurrentPosition;
+  Duration? Function() getDuration;
   Function pauseVideo;
   Function playVideo;
-  Function(double) seekVideo;
+  Function(Duration) seekVideo;
 
   MutableVideoPlayerController({
     required this.getIsPaused,
+    required this.getCurrentPosition,
     required this.pauseVideo,
     required this.playVideo,
     required this.seekVideo,
@@ -28,7 +31,10 @@ class MutableVideoPlayerController extends VideoPlayerController {
   bool get isPaused => getIsPaused();
 
   @override
-  int? get duration => getDuration();
+  Duration? get duration => getDuration();
+
+  @override
+  Duration? get currentPosition => getCurrentPosition();
 
   @override
   pause() => pauseVideo();
@@ -37,5 +43,19 @@ class MutableVideoPlayerController extends VideoPlayerController {
   play() => playVideo();
 
   @override
-  seek(double destination) => seekVideo(destination);
+  seek(double percentage) {
+    final duration = this.duration;
+    if (duration != null) {
+      seekVideo(duration * percentage);
+    }
+  }
+
+  fastForward(Duration duration) {
+    final currentPosition = this.currentPosition;
+    if (currentPosition != null) {
+      seekVideo(currentPosition + duration);
+    }
+  }
+
+  rewind(Duration duration) => fastForward(-duration);
 }

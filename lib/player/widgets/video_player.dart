@@ -30,20 +30,13 @@ class _VideoPlayerState extends State<VideoPlayer> {
       }
     });
 
-    getDuration() => player.position.duration?.inMilliseconds;
-
     final controller = MutableVideoPlayerController(
       getIsPaused: () => !player.playback.isPlaying,
       pauseVideo: () => player.pause(),
       playVideo: () => player.play(),
-      seekVideo: (destination) {
-        final duration = getDuration();
-        if (duration != null) {
-          player.seek(Duration(milliseconds: (duration * destination).toInt()));
-          widget.onProgress(destination);
-        }
-      },
-      getDuration: getDuration,
+      seekVideo: (position) => player.seek(position),
+      getDuration: () => player.position.duration,
+      getCurrentPosition: () => player.position.position,
     );
 
     widget.setController(controller);
