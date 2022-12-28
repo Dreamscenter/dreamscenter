@@ -3,10 +3,18 @@ import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:flutter/material.dart';
 
 class VideoPlayer extends StatefulWidget {
-  final Function(double) onProgress;
+  final Function(double) onProgressed;
+  final Function() onPlayed;
+  final Function onPaused;
   final Function(VideoPlayerController) setController;
 
-  const VideoPlayer({super.key, required this.onProgress, required this.setController});
+  const VideoPlayer({
+    super.key,
+    required this.onProgressed,
+    required this.onPlayed,
+    required this.onPaused,
+    required this.setController,
+  });
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
@@ -26,17 +34,31 @@ class _VideoPlayerState extends State<VideoPlayer> {
       if (event.position != null && event.duration != null) {
         final progress = event.position!.inMilliseconds / event.duration!.inMilliseconds;
 
-        widget.onProgress(progress.isNaN ? 0 : progress);
+        widget.onProgressed(progress.isNaN ? 0 : progress);
       }
     });
 
+    getCurrentPosition() => player.position.position;
+    getDuration() => player.position.duration;
+
     final controller = MutableVideoPlayerController(
-      getIsPaused: () => !player.playback.isPlaying,
-      pauseVideo: () => player.pause(),
-      playVideo: () => player.play(),
-      seekVideo: (position) => player.seek(position),
-      getDuration: () => player.position.duration,
-      getCurrentPosition: () => player.position.position,
+      playVideo: () {
+        player.play();
+        widget.onPlayed();
+      },
+      pauseVideo: () {
+        player.pause();
+        widget.onPaused();
+      },
+      seekVideo: (position) {
+        player.seek(position);
+        final duration = getDuration();
+        if (duration != null) {
+          widget.onProgressed(position.inMilliseconds / duration.inMilliseconds);
+        }
+      },
+      getCurrentPosition: getCurrentPosition,
+      getDuration: getDuration,
     );
 
     widget.setController(controller);

@@ -20,26 +20,26 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-            onTapUp: (details) => handleSeek(details, context),
-            child: Stack(children: [
-              _background(context),
-              _mediaProgress(context, constraints),
-            ])),
-      );
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+              onTapUp: (details) => handleSeek(details, context),
+              child: Stack(children: [
+                background(context),
+                mediaProgress(context, constraints),
+              ])));
     });
   }
 
-  Container _background(BuildContext context) {
+  background(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-      color: const Color(0xFF333333),
-      borderRadius: BorderRadius.circular(longestSize(context)),
-    ));
+      decoration: BoxDecoration(
+        color: const Color(0xFF333333),
+        borderRadius: BorderRadius.circular(longestSize(context)),
+      ),
+    );
   }
 
-  ClipRRect _mediaProgress(BuildContext context, BoxConstraints constraints) {
+  mediaProgress(BuildContext context, BoxConstraints constraints) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(longestSize(context)),
         child: Transform.translate(
@@ -50,7 +50,7 @@ class ProgressBar extends StatelessWidget {
                 child: Container(
                     width: constraints.maxWidth * progress + constraints.maxWidth,
                     decoration: BoxDecoration(
-                      color: Colors.primaryDark,
+                      color: DefaultColors.primaryDark,
                       borderRadius: BorderRadius.circular(longestSize(context)),
                     )))));
   }

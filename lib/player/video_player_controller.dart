@@ -11,7 +11,7 @@ abstract class VideoPlayerController {
 }
 
 class MutableVideoPlayerController extends VideoPlayerController {
-  bool Function() getIsPaused;
+  bool _isPaused = false;
   Duration? Function() getCurrentPosition;
   Duration? Function() getDuration;
   Function pauseVideo;
@@ -19,7 +19,6 @@ class MutableVideoPlayerController extends VideoPlayerController {
   Function(Duration) seekVideo;
 
   MutableVideoPlayerController({
-    required this.getIsPaused,
     required this.getCurrentPosition,
     required this.pauseVideo,
     required this.playVideo,
@@ -28,7 +27,7 @@ class MutableVideoPlayerController extends VideoPlayerController {
   });
 
   @override
-  bool get isPaused => getIsPaused();
+  bool get isPaused => _isPaused;
 
   @override
   Duration? get duration => getDuration();
@@ -37,10 +36,16 @@ class MutableVideoPlayerController extends VideoPlayerController {
   Duration? get currentPosition => getCurrentPosition();
 
   @override
-  pause() => pauseVideo();
+  play() {
+    _isPaused = false;
+    playVideo();
+  }
 
   @override
-  play() => playVideo();
+  pause() {
+    _isPaused = true;
+    pauseVideo();
+  }
 
   @override
   seek(double percentage) {
