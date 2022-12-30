@@ -27,7 +27,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     final network = Media.network(
-        'https://vger025.cda.pl/ld_C9G4B0YKjt9YzdRghZQ/1672270984/hd31168b3f7331b2e5bcf65c862ea2f7685f94212d6f3d20746b4bf692f85354bc.mp4');
+        'https://vger025.cda.pl/_yf4l0lepfnBOyabFCILVQ/1672456081/hd31168b3f7331b2e5bcf65c862ea2f7685f94212d6f3d20746b4bf692f85354bc.mp4');
 
     player.open(network, autoStart: true);
     player.positionStream.listen((event) {

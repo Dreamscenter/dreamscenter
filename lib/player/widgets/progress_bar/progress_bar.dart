@@ -1,4 +1,5 @@
 import 'package:dreamscenter/colors.dart';
+import 'package:dreamscenter/player/widgets/progress_bar/progress_indicator.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:flutter/widgets.dart';
 
@@ -57,19 +58,7 @@ class ProgressBar extends StatelessWidget {
           ],
         ),
       ),
-      ClipRRect(
-          borderRadius: BorderRadius.circular(longestSize(context)),
-          child: Transform.translate(
-              offset: Offset(-constraints.maxWidth, 0),
-              child: OverflowBox(
-                  alignment: Alignment.centerLeft,
-                  maxWidth: constraints.maxWidth * 2,
-                  child: Container(
-                      width: constraints.maxWidth * progress + constraints.maxWidth,
-                      decoration: BoxDecoration(
-                        color: DefaultColors.primaryDark,
-                        borderRadius: BorderRadius.circular(longestSize(context)),
-                      ))))),
+      ProgressIndicator(progress: progress, color: DefaultColors.primaryDark)
     ]);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:dreamscenter/player/widgets/progress_bar.dart';
+import 'package:dreamscenter/player/widgets/progress_bar/progress_bar.dart';
 import 'package:flutter/material.dart';
 
 class PlayerOverlay extends StatelessWidget {

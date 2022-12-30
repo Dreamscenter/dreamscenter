@@ -4,6 +4,7 @@ import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:flutter/widgets.dart';
+import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -48,6 +49,16 @@ class _PlayerState extends State<Player> {
     });
   }
 
+  switchFullscreen() async {
+    final isFullscreen = await WindowManager.instance.isFullScreen();
+    await WindowManager.instance.setFullScreen(!isFullscreen);
+
+    if (isFullscreen) {
+      final size = await windowManager.getSize();
+      await windowManager.setSize(Size(size.width + 1, size.height + 1));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -55,13 +66,16 @@ class _PlayerState extends State<Player> {
       child: MouseRegion(
         cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
         child: Stack(children: [
-          Listener(
-            onPointerUp: (_) => switchPlayback(),
-            child: VideoPlayer(
-              onProgressed: (progress) => setState(() => this.progress = progress),
-              onPlayed: updateOverlay,
-              onPaused: updateOverlay,
-              setController: (controller) => videoPlayer = controller,
+          GestureDetector(
+            onDoubleTap: switchFullscreen,
+            child: Listener(
+              onPointerUp: (_) => switchPlayback(),
+              child: VideoPlayer(
+                onProgressed: (progress) => setState(() => this.progress = progress),
+                onPlayed: updateOverlay,
+                onPaused: updateOverlay,
+                setController: (controller) => videoPlayer = controller,
+              ),
             ),
           ),
           AnimatedOpacity(
