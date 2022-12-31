@@ -8,7 +8,7 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/widgets.dart';
 import 'package:win32/win32.dart';
 import 'package:win32/win32.dart' as win32;
-import 'package:window_manager/window_manager.dart'' as win32;
+import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
