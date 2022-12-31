@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:ffi' hide Size;
 
 import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
+import 'package:ffi/ffi.dart';
 import 'package:flutter/widgets.dart';
+import 'package:win32/win32.dart' as win32;
+import 'package:win32/win32.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
@@ -16,8 +20,20 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   double progress = 0;
   late VideoPlayerController videoPlayer;
-  bool showOverlay = false;
   Timer? hideOverlayTimer;
+  bool _showOverlay = false;
+
+  set showOverlay(bool value) {
+    if (value == _showOverlay) return;
+
+    _showOverlay = value;
+
+    Timer(const Duration(milliseconds: 100), () {
+      Pointer<POINT> point = malloc();
+      win32.GetCursorPos(point);
+      win32.SetCursorPos(point.ref.x, point.ref.y);
+    });
+  }
 
   switchPlayback() {
     if (videoPlayer.isPaused) {
@@ -64,7 +80,7 @@ class _PlayerState extends State<Player> {
     return Listener(
       onPointerHover: (_) => updateOverlay(),
       child: MouseRegion(
-        cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
+        cursor: _showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
         child: Stack(children: [
           GestureDetector(
             onDoubleTap: switchFullscreen,
@@ -79,7 +95,7 @@ class _PlayerState extends State<Player> {
             ),
           ),
           AnimatedOpacity(
-            opacity: showOverlay ? 1 : 0,
+            opacity: _showOverlay ? 1 : 0,
             duration: const Duration(milliseconds: 200),
             child: PlayerOverlay(progress: progress, onSeek: seek),
           ),
