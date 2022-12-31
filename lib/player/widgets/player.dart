@@ -32,6 +32,7 @@ class _PlayerState extends State<Player> {
       Pointer<POINT> point = malloc();
       win32.GetCursorPos(point);
       win32.SetCursorPos(point.ref.x, point.ref.y);
+      free(point);
     });
   }
 
