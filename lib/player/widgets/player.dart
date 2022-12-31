@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:ffi' hide Size;
 
 import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
-import 'package:ffi/ffi.dart';
+import 'package:dreamscenter/widgets/enhanced_mouse_regionlayer.dart';
 import 'package:flutter/widgets.dart';
-import 'package:win32/win32.dart';
-import 'package:win32/win32.dart' as win32;
 import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
@@ -21,20 +18,7 @@ class _PlayerState extends State<Player> {
   double progress = 0;
   late VideoPlayerController videoPlayer;
   Timer? hideOverlayTimer;
-  bool _showOverlay = false;
-
-  set showOverlay(bool value) {
-    if (value == _showOverlay) return;
-
-    _showOverlay = value;
-
-    Timer(const Duration(milliseconds: 100), () {
-      Pointer<POINT> point = malloc();
-      win32.GetCursorPos(point);
-      win32.SetCursorPos(point.ref.x, point.ref.y);
-      free(point);
-    });
-  }
+  bool showOverlay = false;
 
   switchPlayback() {
     if (videoPlayer.isPaused) {
@@ -80,8 +64,8 @@ class _PlayerState extends State<Player> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerHover: (_) => updateOverlay(),
-      child: MouseRegion(
-        cursor: _showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
+      child: EnhancedMouseRegion(
+        cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
         child: Stack(children: [
           GestureDetector(
             onDoubleTap: switchFullscreen,
@@ -96,7 +80,7 @@ class _PlayerState extends State<Player> {
             ),
           ),
           AnimatedOpacity(
-            opacity: _showOverlay ? 1 : 0,
+            opacity: showOverlay ? 1 : 0,
             duration: const Duration(milliseconds: 200),
             child: PlayerOverlay(progress: progress, onSeek: seek),
           ),

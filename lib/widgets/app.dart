@@ -8,7 +8,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     // Widgets app
     return const MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Dreamscenter',
       home: Player(),
     );
   }
