@@ -5,10 +5,10 @@ import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:ffi/ffi.dart';
-import 'package:flutter/widgetsffi/ffi.dart';
-import 'package:win32/win32.dart' as win32;
+import 'package:flutter/widgets.dart';
 import 'package:win32/win32.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:win32/win32.dart' as win32;
+import 'package:window_manager/window_manager.dart'' as win32;
 
 class Player extends StatefulWidget {
   const Player({super.key});
