@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "app.dreamscenter" "\0"
-            VALUE "FileDescription", "dreamscenter" "\0"
+            VALUE "CompanyName", "Dreamscenter" "\0"
+            VALUE "FileDescription", "Dreamscenter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "dreamscenter" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 app.dreamscenter. All rights reserved." "\0"
-            VALUE "OriginalFilename", "dreamscenter.exe" "\0"
-            VALUE "ProductName", "dreamscenter" "\0"
+            VALUE "InternalName", "Dreamscenter" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 Paweł Kiełb. All rights reserved." "\0"
+            VALUE "OriginalFilename", "Dreamscenter.exe" "\0"
+            VALUE "ProductName", "Dreamscenter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
