@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
-import 'package:dreamscenter/widgets/enhanced_mouse_regionlayer.dart';
+import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
 import 'package:flutter/widgets.dart';
 import 'package:window_manager/window_manager.dart';
 
