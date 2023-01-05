@@ -9,7 +9,9 @@ class App extends StatelessWidget {
     // Widgets app
     return const MaterialApp(
       title: 'Dreamscenter',
-      home: Player(),
+      home: Scaffold(
+        body: Player(),
+      ),
     );
   }
 }

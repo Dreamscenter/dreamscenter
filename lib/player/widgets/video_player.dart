@@ -27,7 +27,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     final network = Media.network(
-        'https://vger025.cda.pl/_yf4l0lepfnBOyabFCILVQ/1672456081/hd31168b3f7331b2e5bcf65c862ea2f7685f94212d6f3d20746b4bf692f85354bc.mp4');
+        'https://vwaw092.cda.pl/WchjhCzQ7aenCUhHBLe_nQ/1672913976/hddc3f282c8715e043e92f04fffe1925d3.mp4');
 
     player.open(network, autoStart: true);
     player.positionStream.listen((event) {
@@ -66,6 +66,6 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Video(player: player, showControls: false));
+    return Video(player: player, showControls: false);
   }
 }
