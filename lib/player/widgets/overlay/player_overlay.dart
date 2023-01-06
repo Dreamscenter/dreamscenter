@@ -11,7 +11,7 @@ class PlayerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return Stack(children: [shadow(), controls(constraints)]);
+      return Stack(children: [shadow(), ui(constraints)]);
     });
   }
 
@@ -34,7 +34,7 @@ class PlayerOverlay extends StatelessWidget {
     );
   }
 
-  controls(BoxConstraints constraints) {
+  ui(BoxConstraints constraints) {
     return Center(
         child: Container(
             margin: EdgeInsets.only(bottom: constraints.maxHeight * .05 > 20 ? constraints.maxHeight * .05 : 20),
@@ -43,8 +43,11 @@ class PlayerOverlay extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 22),
-                  child: const Controls(),
+                  padding: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
+                  child: const SizedBox(
+                    height: 24,
+                    child: Controls(),
+                  ),
                 ),
                 SizedBox(
                   height: 12,

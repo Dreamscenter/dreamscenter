@@ -1,4 +1,32 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+
+class Triangle extends StatelessWidget {
+  final Color color;
+  final double? size;
+  final int rotation;
+
+  const Triangle({super.key, this.color = Colors.black, this.size, this.rotation = 0});
+
+  @override
+  Widget build(BuildContext context) {
+    return RotatedBox(
+      quarterTurns: rotation,
+      child: SizedBox(
+        width: size,
+        height: getHeight(),
+        child: CustomPaint(painter: TrianglePainter(color)),
+      ),
+    );
+  }
+
+  getHeight() {
+    final size = this.size;
+    if (size == null) return null;
+    return size * sqrt(3) / 2;
+  }
+}
 
 class TrianglePainter extends CustomPainter {
   final Color color;
@@ -23,18 +51,4 @@ class TrianglePainter extends CustomPainter {
 
   @override
   bool shouldRebuildSemantics(TrianglePainter oldDelegate) => false;
-}
-
-class Triangle extends StatelessWidget {
-  final Color color;
-
-  const Triangle({super.key, this.color = Colors.black});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: TrianglePainter(color),
-      child: Container(),
-    );
-  }
 }

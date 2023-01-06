@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class Control extends StatelessWidget {
   final Widget icon;
-  final Function onPressed;
+  final Widget popup;
 
-  const Control({super.key, required this.icon, required this.onPressed});
+  const Control({super.key, required this.icon, required this.popup});
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerUp: (_) => onPressed(),
+      onPointerUp: (_) {},
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
