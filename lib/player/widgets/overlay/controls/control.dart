@@ -1,3 +1,4 @@
+import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
 import 'package:flutter/material.dart';
 
 class Control extends StatelessWidget {
@@ -8,21 +9,27 @@ class Control extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerUp: (_) {},
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 4,
-                offset: const Offset(0, 4),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Listener(
+        onPointerUp: (_) {},
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: ControlPopup(
+            content: const Text('abcd'),
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
+              child: icon,
+            ),
           ),
-          child: icon,
         ),
       ),
     );
