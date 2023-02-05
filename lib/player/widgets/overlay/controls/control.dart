@@ -38,7 +38,10 @@ class Control extends StatelessWidget {
                   ),
                 ],
               ),
-              child: icon,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: icon,
+              ),
             ),
           ),
         ),

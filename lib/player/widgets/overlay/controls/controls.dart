@@ -38,7 +38,8 @@ class _ControlsState extends State<Controls> {
                       height: 24,
                       child: Row(
                         children: [
-                          VolumeControl(key: volume, popupBoundary: popupBoundary, showPopup: true, onOpenPopup: () {}),
+                          VolumeControl(
+                              key: volume, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
                           const SizedBox(width: buttonSpacing),
                           SourceControl(
                               key: source, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),

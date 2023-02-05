@@ -4,6 +4,7 @@ import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
+import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -20,6 +21,34 @@ class _PlayerState extends State<Player> {
   Timer? hideOverlayTimer;
   bool showOverlay = false;
   final GlobalKey overlay = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return InteractionDetector(
+      onHover: () => updateOverlay(),
+      child: EnhancedMouseRegion(
+        cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
+        child: Stack(children: [
+          InteractionDetector(
+            onTap: () => switchPlayback(),
+            onDoubleTap: switchFullscreen,
+            child: VideoPlayer(
+              onProgressed: (progress) => setState(() => this.progress = progress),
+              onPlayed: updateOverlay,
+              onPaused: updateOverlay,
+              setController: (controller) => videoPlayer = controller,
+            ),
+          ),
+          AnimatedOpacity(
+            key: overlay,
+            opacity: showOverlay ? 1 : 0,
+            duration: const Duration(milliseconds: 200),
+            child: PlayerOverlay(progress: progress, onSeek: seek),
+          ),
+        ]),
+      ),
+    );
+  }
 
   switchPlayback() {
     if (videoPlayer.isPaused) {
@@ -62,35 +91,5 @@ class _PlayerState extends State<Player> {
       final size = await windowManager.getSize();
       await windowManager.setSize(Size(size.width + 1, size.height + 1));
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Listener(
-      onPointerHover: (_) => updateOverlay(),
-      child: EnhancedMouseRegion(
-        cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
-        child: Stack(children: [
-          GestureDetector(
-            onDoubleTap: switchFullscreen,
-            child: Listener(
-              onPointerUp: (_) => switchPlayback(),
-              child: VideoPlayer(
-                onProgressed: (progress) => setState(() => this.progress = progress),
-                onPlayed: updateOverlay,
-                onPaused: updateOverlay,
-                setController: (controller) => videoPlayer = controller,
-              ),
-            ),
-          ),
-          AnimatedOpacity(
-            key: overlay,
-            opacity: showOverlay ? 1 : 0,
-            duration: const Duration(milliseconds: 200),
-            child: PlayerOverlay(progress: progress, onSeek: seek),
-          ),
-        ]),
-      ),
-    );
   }
 }
