@@ -4,9 +4,7 @@ import 'package:dreamscenter/player/widgets/overlay/controls/volume/volume_contr
 import 'package:flutter/material.dart';
 
 class Controls extends StatefulWidget {
-  final Widget progressBar;
-
-  const Controls({super.key, required this.progressBar});
+  const Controls({super.key});
 
   @override
   State<Controls> createState() => _ControlsState();
@@ -21,40 +19,17 @@ class _ControlsState extends State<Controls> {
   @override
   Widget build(BuildContext context) {
     const buttonSpacing = 21.0;
-    return LayoutBuilder(
-        key: popupBoundary,
-        builder: (context, constraints) {
-          return Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: EdgeInsets.only(bottom: constraints.maxHeight * .05 > 20 ? constraints.maxHeight * .05 : 20),
-              width: constraints.maxWidth * .05 > 40 ? constraints.maxWidth * .95 : constraints.maxWidth - 40,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
-                    child: SizedBox(
-                      height: 24,
-                      child: Row(
-                        children: [
-                          VolumeControl(
-                              key: volume, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
-                          const SizedBox(width: buttonSpacing),
-                          SourceControl(
-                              key: source, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
-                          const SizedBox(width: buttonSpacing),
-                          SyncplayControl(
-                              key: syncplay, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
-                        ],
-                      ),
-                    ),
-                  ),
-                  widget.progressBar,
-                ],
-              ),
-            ),
-          );
-        });
+    return SizedBox(
+      height: 24,
+      child: Row(
+        children: [
+          VolumeControl(key: volume, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+          const SizedBox(width: buttonSpacing),
+          SourceControl(key: source, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+          const SizedBox(width: buttonSpacing),
+          SyncplayControl(key: syncplay, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+        ],
+      ),
+    );
   }
 }
