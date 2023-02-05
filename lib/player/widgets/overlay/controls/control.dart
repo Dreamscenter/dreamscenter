@@ -1,22 +1,33 @@
-import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
+import 'package:dreamscenter/widgets/popup/popup.dart';
 import 'package:flutter/material.dart';
 
 class Control extends StatelessWidget {
   final Widget icon;
   final Widget popup;
+  final GlobalKey popupBoundary;
+  final bool showPopup;
+  final Function onOpenPopup;
 
-  const Control({super.key, required this.icon, required this.popup});
+  const Control({
+    super.key,
+    required this.icon,
+    required this.popup,
+    required this.popupBoundary,
+    required this.showPopup,
+    required this.onOpenPopup,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Listener(
-        onPointerUp: (_) {},
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: ControlPopup(
-            content: const Text('abcd'),
+      child: Popup(
+        popup: const Text("hello popup"),
+        opened: showPopup,
+        child: Listener(
+          onPointerDown: (_) => onOpenPopup(),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: [

@@ -19,6 +19,7 @@ class _PlayerState extends State<Player> {
   late VideoPlayerController videoPlayer;
   Timer? hideOverlayTimer;
   bool showOverlay = false;
+  final GlobalKey overlay = GlobalKey();
 
   switchPlayback() {
     if (videoPlayer.isPaused) {
@@ -33,9 +34,11 @@ class _PlayerState extends State<Player> {
   }
 
   updateOverlay() {
-    setState(() {
-      showOverlay = true;
-    });
+    if (!showOverlay) {
+      setState(() {
+        showOverlay = true;
+      });
+    }
 
     hideOverlayTimer?.cancel();
 
@@ -44,6 +47,7 @@ class _PlayerState extends State<Player> {
     }
 
     hideOverlayTimer = Timer(const Duration(seconds: 1), () {
+      if (showOverlay == false) return;
       setState(() {
         showOverlay = false;
       });
@@ -80,6 +84,7 @@ class _PlayerState extends State<Player> {
             ),
           ),
           AnimatedOpacity(
+            key: overlay,
             opacity: showOverlay ? 1 : 0,
             duration: const Duration(milliseconds: 200),
             child: PlayerOverlay(progress: progress, onSeek: seek),

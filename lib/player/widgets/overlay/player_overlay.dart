@@ -2,17 +2,31 @@ import 'package:dreamscenter/player/widgets/overlay/controls/controls.dart';
 import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_bar.dart';
 import 'package:flutter/material.dart';
 
-class PlayerOverlay extends StatelessWidget {
+class PlayerOverlay extends StatefulWidget {
   final double progress;
   final Function(double) onSeek;
 
   const PlayerOverlay({super.key, required this.progress, required this.onSeek});
 
   @override
+  State<PlayerOverlay> createState() => _PlayerOverlayState();
+}
+
+class _PlayerOverlayState extends State<PlayerOverlay> {
+  final GlobalKey controls = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(children: [shadow(), ui(constraints)]);
-    });
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        shadow(),
+        Controls(
+          key: controls,
+          progressBar: ProgressBar(progress: widget.progress, onSeek: widget.onSeek),
+        ),
+      ],
+    );
   }
 
   shadow() {
@@ -32,28 +46,5 @@ class PlayerOverlay extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  ui(BoxConstraints constraints) {
-    return Center(
-        child: Container(
-            margin: EdgeInsets.only(bottom: constraints.maxHeight * .05 > 20 ? constraints.maxHeight * .05 : 20),
-            width: constraints.maxWidth * .05 > 40 ? constraints.maxWidth * .95 : constraints.maxWidth - 40,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
-                  child: const SizedBox(
-                    height: 24,
-                    child: Controls(),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                  child: ProgressBar(progress: progress, onSeek: onSeek),
-                ),
-              ],
-            )));
   }
 }

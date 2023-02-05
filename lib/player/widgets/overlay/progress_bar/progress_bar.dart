@@ -24,10 +24,13 @@ class ProgressBar extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
               onTapUp: (details) => handleSeek(details, context),
-              child: Stack(children: [
-                background(context),
-                mediaProgress(context, constraints),
-              ])));
+              child: SizedBox(
+                height: 12,
+                child: Stack(children: [
+                  background(context),
+                  mediaProgress(context, constraints),
+                ]),
+              )));
     });
   }
 
