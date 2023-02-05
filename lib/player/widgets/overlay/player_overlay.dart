@@ -31,25 +31,23 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
   }
 
   controlsAndProgressBar(Widget controls, Widget progressBar) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: FractionallySizedContainer(
-          marginFactor: const EdgeInsets.only(bottom: .05) + const EdgeInsets.symmetric(horizontal: .025),
-          minMargin: const EdgeInsets.only(bottom: 20) + const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
-                child: controls,
-              ),
-              progressBar,
-            ],
-          ),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: FractionallySizedContainer(
+        marginFactor: const EdgeInsets.only(bottom: .05) + const EdgeInsets.symmetric(horizontal: .025),
+        minMargin: const EdgeInsets.only(bottom: 20) + const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
+              child: controls,
+            ),
+            progressBar,
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 
   shadow() {
