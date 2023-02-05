@@ -1,5 +1,6 @@
 import 'package:dreamscenter/player/widgets/overlay/controls/controls.dart';
 import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_bar.dart';
+import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
 import 'package:flutter/material.dart';
 
 class PlayerOverlay extends StatefulWidget {
@@ -33,14 +34,14 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
     return LayoutBuilder(builder: (context, constraints) {
       return Align(
         alignment: Alignment.bottomCenter,
-        child: Container(
-          margin: EdgeInsets.only(bottom: constraints.maxHeight * .05 > 20 ? constraints.maxHeight * .05 : 20),
-          width: constraints.maxWidth * .05 > 40 ? constraints.maxWidth * .95 : constraints.maxWidth - 40,
+        child: FractionallySizedContainer(
+          marginFactor: const EdgeInsets.only(bottom: .05) + const EdgeInsets.symmetric(horizontal: .025),
+          minMargin: const EdgeInsets.only(bottom: 20) + const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 3) + const EdgeInsets.only(bottom: 20),
                 child: controls,
               ),
               progressBar,

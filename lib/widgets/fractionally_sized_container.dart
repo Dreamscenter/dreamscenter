@@ -33,7 +33,7 @@ class FractionallySizedContainer extends StatelessWidget {
   }
 
   getWidth(BoxConstraints constraints) {
-    if (widthFactor != null) {
+    if (widthFactor == null) {
       return null;
     }
 
@@ -42,7 +42,7 @@ class FractionallySizedContainer extends StatelessWidget {
   }
 
   getHeight(BoxConstraints constraints) {
-    if (heightFactor != null) {
+    if (heightFactor == null) {
       return null;
     }
 
@@ -51,11 +51,17 @@ class FractionallySizedContainer extends StatelessWidget {
   }
 
   getMargin(BoxConstraints constraints) {
-    if (marginFactor != null) {
+    if (marginFactor == null) {
       return null;
     }
 
-    final margin = marginFactor! * constraints.maxWidth;
+    final margin = EdgeInsets.only(
+      left: marginFactor!.left * constraints.maxWidth,
+      top: marginFactor!.top * constraints.maxHeight,
+      right: marginFactor!.right * constraints.maxWidth,
+      bottom: marginFactor!.bottom * constraints.maxHeight,
+    );
+
     return EdgeInsets.only(
       left: margin.left.clamp(minMargin.left, double.infinity),
       top: margin.top.clamp(minMargin.top, double.infinity),
