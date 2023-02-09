@@ -11,10 +11,7 @@ class Controls extends StatefulWidget {
 }
 
 class _ControlsState extends State<Controls> {
-  final GlobalKey popupBoundary = GlobalKey();
-  final GlobalKey volume = GlobalKey();
-  final GlobalKey source = GlobalKey();
-  final GlobalKey syncplay = GlobalKey();
+  bool open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +20,17 @@ class _ControlsState extends State<Controls> {
       height: 24,
       child: Row(
         children: [
-          VolumeControl(key: volume, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+          VolumeControl(
+              showPopup: open,
+              onOpenPopup: () {
+                setState(() {
+                  open = !open;
+                });
+              }),
           const SizedBox(width: buttonSpacing),
-          SourceControl(key: source, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+          SourceControl(showPopup: false, onOpenPopup: () {}),
           const SizedBox(width: buttonSpacing),
-          SyncplayControl(key: syncplay, popupBoundary: popupBoundary, showPopup: false, onOpenPopup: () {}),
+          SyncplayControl(showPopup: false, onOpenPopup: () {}),
         ],
       ),
     );

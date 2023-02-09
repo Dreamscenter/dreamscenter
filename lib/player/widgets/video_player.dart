@@ -3,10 +3,10 @@ import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:flutter/material.dart';
 
 class VideoPlayer extends StatefulWidget {
-  final Function(double) onProgressed;
-  final Function() onPlayed;
-  final Function onPaused;
-  final Function(VideoPlayerController) setController;
+  final void Function(double) onProgressed;
+  final void Function() onPlayed;
+  final void Function() onPaused;
+  final void Function(VideoPlayerController) setController;
 
   const VideoPlayer({
     super.key,
@@ -27,7 +27,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     final network = Media.network(
-        'https://vwaw575.cda.pl/l7QKsqTpjM6XqBwguX3T9Q/1675635307/hdebb785afd7523dc492f795659ef5c41d.mp4');
+        'https://vwaw368.cda.pl/7WoDm8TQyzW98HpjzNfRrg/1676011904/hd1cf07eb8f69b5e82d295199fecde4ee7.mp4');
 
     player.open(network, autoStart: true);
     player.positionStream.listen((event) {

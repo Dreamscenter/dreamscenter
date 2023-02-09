@@ -1,11 +1,12 @@
 import 'package:dreamscenter/player/widgets/overlay/controls/controls.dart';
 import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_bar.dart';
+import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
 import 'package:flutter/material.dart';
 
 class PlayerOverlay extends StatefulWidget {
   final double progress;
-  final Function(double) onSeek;
+  final void Function(double) onSeek;
 
   const PlayerOverlay({super.key, required this.progress, required this.onSeek});
 
@@ -14,19 +15,18 @@ class PlayerOverlay extends StatefulWidget {
 }
 
 class _PlayerOverlayState extends State<PlayerOverlay> {
-  final GlobalKey controls = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        shadow(),
-        controlsAndProgressBar(
-          const Controls(),
-          ProgressBar(progress: widget.progress, onSeek: widget.onSeek),
-        ),
-      ],
+    return EnhancedOverlay(
+      child: Stack(
+        children: [
+          shadow,
+          controlsAndProgressBar(
+            const Controls(),
+            ProgressBar(progress: widget.progress, onSeek: widget.onSeek),
+          ),
+        ],
+      ),
     );
   }
 
@@ -50,22 +50,20 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
     );
   }
 
-  shadow() {
-    return IgnorePointer(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.transparent,
-              Colors.black.withOpacity(0.92),
-              Colors.black,
-            ],
-            stops: const [0, 0.92, 1],
-          ),
+  Widget shadow = IgnorePointer(
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            Colors.black.withOpacity(0.92),
+            Colors.black,
+          ],
+          stops: const [0, 0.92, 1],
         ),
       ),
-    );
-  }
+    ),
+  );
 }

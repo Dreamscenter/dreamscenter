@@ -4,18 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SourceControl extends StatelessWidget {
-  final GlobalKey popupBoundary;
   final bool showPopup;
-  final Function onOpenPopup;
+  final void Function() onOpenPopup;
 
-  const SourceControl({super.key, required this.popupBoundary, required this.showPopup, required this.onOpenPopup});
+  const SourceControl({super.key, required this.showPopup, required this.onOpenPopup});
 
   @override
   Widget build(BuildContext context) {
     return Control(
       icon: const FaIcon(FontAwesomeIcons.circlePlay, color: DefaultColors.primaryDark),
       popup: const Text("source"),
-      popupBoundary: popupBoundary,
       showPopup: showPopup,
       onOpenPopup: onOpenPopup,
     );

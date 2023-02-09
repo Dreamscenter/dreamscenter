@@ -20,17 +20,16 @@ class _PlayerState extends State<Player> {
   late VideoPlayerController videoPlayer;
   Timer? hideOverlayTimer;
   bool showOverlay = false;
-  final GlobalKey overlay = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return InteractionDetector(
-      onHover: () => updateOverlay(),
+      onHover: updateOverlay,
       child: EnhancedMouseRegion(
         cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
         child: Stack(children: [
           InteractionDetector(
-            onTap: () => switchPlayback(),
+            onTapDown: () => switchPlayback(),
             onDoubleTap: switchFullscreen,
             child: VideoPlayer(
               onProgressed: (progress) => setState(() => this.progress = progress),
@@ -40,7 +39,6 @@ class _PlayerState extends State<Player> {
             ),
           ),
           AnimatedOpacity(
-            key: overlay,
             opacity: showOverlay ? 1 : 0,
             duration: const Duration(milliseconds: 200),
             child: PlayerOverlay(progress: progress, onSeek: seek),

@@ -2,11 +2,10 @@ import 'package:dreamscenter/player/widgets/overlay/controls/control.dart';
 import 'package:flutter/widgets.dart';
 
 class SyncplayControl extends StatelessWidget {
-  final GlobalKey popupBoundary;
   final bool showPopup;
-  final Function onOpenPopup;
+  final void Function() onOpenPopup;
 
-  const SyncplayControl({super.key, required this.popupBoundary, required this.showPopup, required this.onOpenPopup});
+  const SyncplayControl({super.key, required this.showPopup, required this.onOpenPopup});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,6 @@ class SyncplayControl extends StatelessWidget {
         filterQuality: FilterQuality.medium,
       ),
       popup: const Text("syncplay"),
-      popupBoundary: popupBoundary,
       showPopup: showPopup,
       onOpenPopup: onOpenPopup,
     );

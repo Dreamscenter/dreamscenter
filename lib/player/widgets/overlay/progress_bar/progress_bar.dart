@@ -5,17 +5,9 @@ import 'package:flutter/widgets.dart';
 
 class ProgressBar extends StatelessWidget {
   final double progress;
-  final Function(double) onSeek;
+  final void Function(double) onSeek;
 
   const ProgressBar({super.key, required this.progress, required this.onSeek});
-
-  handleSeek(TapUpDetails details, BuildContext progressBar) {
-    final width = progressBar.size?.width;
-    if (width != null) {
-      final progress = details.localPosition.dx / width;
-      onSeek(progress);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,5 +55,13 @@ class ProgressBar extends StatelessWidget {
       ),
       ProgressIndicator(progress: progress, color: DefaultColors.primaryDark)
     ]);
+  }
+
+  handleSeek(TapUpDetails details, BuildContext progressBar) {
+    final width = progressBar.size?.width;
+    if (width != null) {
+      final progress = details.localPosition.dx / width;
+      onSeek(progress);
+    }
   }
 }
