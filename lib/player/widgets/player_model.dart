@@ -1,4 +1,5 @@
 import 'package:dreamscenter/player/video_player_controller.dart';
+import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
 import 'package:flutter/foundation.dart';
 
 class PlayerModel extends ChangeNotifier {
@@ -11,12 +12,14 @@ class PlayerModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  VideoPlayerController? _videoPlayer;
+  VideoPlayerController? videoPlayer;
 
-  VideoPlayerController? get videoPlayer => _videoPlayer;
+  ControlPopup? _openedPopup;
 
-  set videoPlayer(VideoPlayerController? newValue) {
-    _videoPlayer = newValue;
+  ControlPopup? get openedPopup => _openedPopup;
+
+  set openedPopup(ControlPopup? newValue) {
+    _openedPopup = newValue;
     notifyListeners();
   }
 }

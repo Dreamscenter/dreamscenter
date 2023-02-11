@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/video_player_controller.dart';
-import 'package:dreamscenter/player/widgets/overlay/player_model.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
+import 'package:dreamscenter/player/widgets/player_model.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:dreamscenter/widgets/consuming_provider.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
@@ -20,6 +20,7 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   Timer? hideOverlayTimer;
   bool showOverlay = false;
+  late PlayerModel model;
   late VideoPlayerController videoPlayer;
 
   @override
@@ -27,6 +28,7 @@ class _PlayerState extends State<Player> {
     return ConsumingProvider(
       create: (_) => PlayerModel(),
       builder: (_, model, __) {
+        this.model = model;
         if (model.videoPlayer != null) videoPlayer = model.videoPlayer!;
         return InteractionDetector(
           onHover: updateOverlay,
@@ -76,7 +78,7 @@ class _PlayerState extends State<Player> {
 
     hideOverlayTimer?.cancel();
 
-    if (videoPlayer.isPaused) {
+    if (videoPlayer.isPaused || model.openedPopup != null) {
       return;
     }
 
