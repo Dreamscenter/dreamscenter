@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/video_player_controller.dart';
+import 'package:dreamscenter/player/widgets/overlay/player_model.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
+import 'package:dreamscenter/widgets/consuming_provider.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
@@ -16,35 +18,40 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-  double progress = 0;
-  late VideoPlayerController videoPlayer;
   Timer? hideOverlayTimer;
   bool showOverlay = false;
+  late VideoPlayerController videoPlayer;
 
   @override
   Widget build(BuildContext context) {
-    return InteractionDetector(
-      onHover: updateOverlay,
-      child: EnhancedMouseRegion(
-        cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
-        child: Stack(children: [
-          InteractionDetector(
-            onTapDown: () => switchPlayback(),
-            onDoubleTap: switchFullscreen,
-            child: VideoPlayer(
-              onProgressed: (progress) => setState(() => this.progress = progress),
-              onPlayed: updateOverlay,
-              onPaused: updateOverlay,
-              setController: (controller) => videoPlayer = controller,
-            ),
+    return ConsumingProvider(
+      create: (_) => PlayerModel(),
+      builder: (_, model, __) {
+        if (model.videoPlayer != null) videoPlayer = model.videoPlayer!;
+        return InteractionDetector(
+          onHover: updateOverlay,
+          child: EnhancedMouseRegion(
+            cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
+            child: Stack(children: [
+              InteractionDetector(
+                onTapDown: () => switchPlayback(),
+                onDoubleTap: switchFullscreen,
+                child: VideoPlayer(
+                  onProgressed: (progress) => setState(() => model.progress = progress),
+                  onPlayed: updateOverlay,
+                  onPaused: updateOverlay,
+                  setController: (controller) => model.videoPlayer = controller,
+                ),
+              ),
+              AnimatedOpacity(
+                opacity: showOverlay ? 1 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: PlayerOverlay(progress: model.progress, onSeek: seek),
+              ),
+            ]),
           ),
-          AnimatedOpacity(
-            opacity: showOverlay ? 1 : 0,
-            duration: const Duration(milliseconds: 200),
-            child: PlayerOverlay(progress: progress, onSeek: seek),
-          ),
-        ]),
-      ),
+        );
+      },
     );
   }
 
