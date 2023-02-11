@@ -43,6 +43,7 @@ class _PlayerState extends State<Player> {
                   onPlayed: updateOverlay,
                   onPaused: updateOverlay,
                   setController: (controller) => model.videoPlayer = controller,
+                  onVolumeChanged: (newValue) => model.volume = newValue,
                 ),
               ),
               AnimatedOpacity(

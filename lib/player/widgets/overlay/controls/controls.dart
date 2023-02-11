@@ -6,14 +6,9 @@ import 'package:dreamscenter/player/widgets/player_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Controls extends StatefulWidget {
+class Controls extends StatelessWidget {
   const Controls({super.key});
 
-  @override
-  State<Controls> createState() => _ControlsState();
-}
-
-class _ControlsState extends State<Controls> {
   @override
   Widget build(BuildContext context) {
     const buttonSpacing = 21.0;

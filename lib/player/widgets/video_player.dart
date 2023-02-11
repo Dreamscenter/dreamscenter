@@ -6,6 +6,7 @@ class VideoPlayer extends StatefulWidget {
   final void Function(double) onProgressed;
   final void Function() onPlayed;
   final void Function() onPaused;
+  final void Function(double) onVolumeChanged;
   final void Function(VideoPlayerController) setController;
 
   const VideoPlayer({
@@ -13,6 +14,7 @@ class VideoPlayer extends StatefulWidget {
     required this.onProgressed,
     required this.onPlayed,
     required this.onPaused,
+    required this.onVolumeChanged,
     required this.setController,
   });
 
@@ -38,6 +40,10 @@ class _VideoPlayerState extends State<VideoPlayer> {
       }
     });
 
+    player.generalStream.listen((event) {
+      widget.onVolumeChanged(event.volume);
+    });
+
     getCurrentPosition() => player.position.position;
     getDuration() => player.position.duration;
 
@@ -59,6 +65,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
       },
       getCurrentPosition: getCurrentPosition,
       getDuration: getDuration,
+      setVideoVolume: (volume) {
+        player.setVolume(volume);
+      },
     );
 
     widget.setController(controller);

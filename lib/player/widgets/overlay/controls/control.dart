@@ -43,7 +43,7 @@ class Control extends StatelessWidget {
     );
 
     final withPopup = Popup(
-      popup: const Text("hello popup"),
+      popup: popup,
       opened: showPopup,
       child: clickable,
     );

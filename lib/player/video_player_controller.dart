@@ -3,11 +3,13 @@ abstract class VideoPlayerController {
   abstract final Duration? currentPosition;
   abstract final Duration? duration;
 
-  pause();
+  void pause();
 
-  play();
+  void play();
 
-  seek(double percentage);
+  void seek(double percentage);
+
+  void setVolume(double volume);
 }
 
 class MutableVideoPlayerController extends VideoPlayerController {
@@ -16,7 +18,8 @@ class MutableVideoPlayerController extends VideoPlayerController {
   Duration? Function() getDuration;
   Function pauseVideo;
   Function playVideo;
-  Function(Duration) seekVideo;
+  void Function(Duration) seekVideo;
+  void Function(double) setVideoVolume;
 
   MutableVideoPlayerController({
     required this.getCurrentPosition,
@@ -24,6 +27,7 @@ class MutableVideoPlayerController extends VideoPlayerController {
     required this.playVideo,
     required this.seekVideo,
     required this.getDuration,
+    required this.setVideoVolume,
   });
 
   @override
@@ -63,4 +67,9 @@ class MutableVideoPlayerController extends VideoPlayerController {
   }
 
   rewind(Duration duration) => fastForward(-duration);
+
+  @override
+  setVolume(double volume) {
+    setVideoVolume(volume);
+  }
 }

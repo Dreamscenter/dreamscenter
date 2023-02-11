@@ -1,5 +1,6 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/control.dart';
+import 'package:dreamscenter/player/widgets/overlay/controls/volume/volume_popup.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,7 +14,7 @@ class VolumeControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Control(
       icon: const FaIcon(FontAwesomeIcons.volumeHigh, color: DefaultColors.primaryDark),
-      popup: const Text("volume"),
+      popup: const VolumePopup(),
       showPopup: showPopup,
       onOpenPopup: onOpenPopup,
     );

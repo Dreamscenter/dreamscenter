@@ -22,4 +22,13 @@ class PlayerModel extends ChangeNotifier {
     _openedPopup = newValue;
     notifyListeners();
   }
+
+  double _volume = 0;
+
+  double get volume => _volume;
+
+  set volume(double newValue) {
+    _volume = newValue;
+    notifyListeners();
+  }
 }
