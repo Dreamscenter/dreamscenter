@@ -19,28 +19,30 @@ class PopupOverlay extends StatelessWidget {
 class PopupOverlayLayoutDelegate extends SingleChildLayoutDelegate {
   RenderBox anchor;
   RenderBox popupArea;
+  double margin = 15;
 
   PopupOverlayLayoutDelegate(this.anchor, this.popupArea);
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    final anchorTopCenter = anchor.localToGlobal(Offset(anchor.size.width / 2, 0), ancestor: popupArea);
     return BoxConstraints(
       minWidth: 0,
-      maxWidth: constraints.maxWidth,
+      maxWidth: constraints.maxWidth - margin * 2,
       minHeight: 0,
-      maxHeight: constraints.maxHeight,
+      maxHeight: anchorTopCenter.dy - margin * 2,
     );
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    final anchorPosition = anchor.localToGlobal(Offset.zero, ancestor: popupArea);
-    final centeredPosition = anchorPosition - Offset(childSize.width / 2, childSize.height / 2);
-    final clampedPosition = Offset(centeredPosition.dx.clamp(0, size.width - childSize.width),
-        centeredPosition.dy.clamp(0, size.height - childSize.height));
-    final upliftedPosition = clampedPosition - const Offset(0, 50);
+    final anchorTopCenter = anchor.localToGlobal(Offset(anchor.size.width / 2, 0), ancestor: popupArea);
+    final centeredPosition = anchorTopCenter - Offset(childSize.width / 2, 0);
+    final upliftedPosition = centeredPosition - Offset(0, childSize.height + 20);
+    final clampedPosition = Offset(upliftedPosition.dx.clamp(margin, size.width - childSize.width - margin),
+        upliftedPosition.dy.clamp(margin, size.height - childSize.height - margin));
 
-    return upliftedPosition;
+    return clampedPosition;
   }
 
   @override

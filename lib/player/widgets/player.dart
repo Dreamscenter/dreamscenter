@@ -36,7 +36,13 @@ class _PlayerState extends State<Player> {
             cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
             child: Stack(children: [
               InteractionDetector(
-                onTapDown: () => switchPlayback(),
+                onTapDown: () {
+                  if (model.openedPopup != null) {
+                    model.openedPopup = null;
+                    return;
+                  }
+                  switchPlayback();
+                },
                 onDoubleTap: switchFullscreen,
                 child: VideoPlayer(
                   onProgressed: (progress) => setState(() => model.progress = progress),

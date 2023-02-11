@@ -1,4 +1,5 @@
 import 'package:dreamscenter/player/widgets/overlay/controls/control.dart';
+import 'package:dreamscenter/player/widgets/overlay/controls/syncplay/syncplay_popup.dart';
 import 'package:flutter/widgets.dart';
 
 class SyncplayControl extends StatelessWidget {
@@ -14,7 +15,7 @@ class SyncplayControl extends StatelessWidget {
         'assets/syncplay.png',
         filterQuality: FilterQuality.medium,
       ),
-      popup: const Text("syncplay"),
+      popup: const SyncplayPopup(),
       showPopup: showPopup,
       onOpenPopup: onOpenPopup,
     );

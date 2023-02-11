@@ -14,7 +14,7 @@ class PopupBox extends StatelessWidget {
         color: DefaultColors.background,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(15),
         child: child,
       ),
     );
