@@ -5,6 +5,7 @@ import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/player_model.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:dreamscenter/widgets/consuming_provider.dart';
+import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
@@ -52,7 +53,7 @@ class _PlayerState extends State<Player> {
                   onVolumeChanged: (newValue) => model.volume = newValue,
                 ),
               ),
-              AnimatedOpacity(
+              EnhancedAnimatedOpacity(
                 opacity: showOverlay ? 1 : 0,
                 duration: const Duration(milliseconds: 200),
                 child: PlayerOverlay(progress: model.progress, onSeek: seek),

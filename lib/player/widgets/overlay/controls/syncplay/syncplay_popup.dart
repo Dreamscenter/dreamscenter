@@ -37,10 +37,7 @@ class SyncplayPopup extends StatelessWidget {
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: DefaultColors.primaryDark),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: DefaultColors.primaryDark),
-        ),
+        labelStyle: const TextStyle(color: Colors.white),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: DefaultColors.primaryDark),
         ),
