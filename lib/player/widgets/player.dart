@@ -74,7 +74,7 @@ class _PlayerState extends State<Player> {
 
     hideOverlayTimer?.cancel();
 
-    if (playback != null || playback!.isPaused || model.openedPopup != null) {
+    if (playback == null || playback!.isPaused || model.openedPopup != null) {
       return;
     }
 
