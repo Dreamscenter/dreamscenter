@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/video_player_controller.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
-import 'package:dreamscenter/player/widgets/player_model.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
 import 'package:dreamscenter/widgets/consuming_provider.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';

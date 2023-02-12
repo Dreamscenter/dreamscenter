@@ -1,5 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
-import 'package:dreamscenter/player/widgets/player_model.dart';
+import 'package:dreamscenter/player/player_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

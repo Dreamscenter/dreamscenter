@@ -1,4 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
+import 'package:dreamscenter/player/syncplay/syncplay_client.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,14 @@ class SyncplayPopup extends StatelessWidget {
 
   _enterRoom(BuildContext context) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: () {
+        SyncplayClient().start(
+          serverAddress: 'syncplay.pl',
+          serverPassword: null,
+          username: 'Gieted (Dreamscenter)',
+          room: 'Gieted',
+        );
+      },
       style: OutlinedButton.styleFrom(
         foregroundColor: DefaultColors.primaryDark,
         backgroundColor: Colors.black.withOpacity(0.1),
