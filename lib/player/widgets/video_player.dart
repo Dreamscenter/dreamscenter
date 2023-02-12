@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +19,11 @@ class VideoPlayer extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<VideoPlayer> {
-  final player = Player(id: 69420);
+  final player = Player(id: Random().nextInt(1000000000));
 
   @override
   void initState() {
     super.initState();
-    final network = Media.network(
-        'https://vwaw030.cda.pl/mR4Cq40OHPvD7bjosr1oNw/1676234902/hd1cf07eb8f69b5e82d295199fecde4ee7.mp4');
-
-    player.open(network, autoStart: true);
 
     final playback = VideoPlayback(
       isPaused: false,
@@ -42,6 +40,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
       },
       setVideoVolume: (volume) {
         player.setVolume(volume);
+      },
+      changeVideoUrl: (url) {
+        player.open(Media.network(url), autoStart: true);
       },
     );
 
@@ -66,5 +67,11 @@ class _VideoPlayerState extends State<VideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return Video(player: player, showControls: false);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    player.dispose();
   }
 }

@@ -113,6 +113,7 @@ class _PlayerState extends State<Player> {
   @override
   void dispose() {
     super.dispose();
+    hideOverlayTimer?.cancel();
     playback?.removeListener(playbackListener);
   }
 }
