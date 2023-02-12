@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/player_model.dart';
-import 'package:dreamscenter/player/video_player_controller.dart';
+import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player.dart';
-import 'package:dreamscenter/widgets/consuming_provider.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
@@ -22,15 +22,18 @@ class _PlayerState extends State<Player> {
   Timer? hideOverlayTimer;
   bool showOverlay = false;
   late PlayerModel model;
-  late VideoPlayerController videoPlayer;
+  VideoPlayback? playback;
+  bool wasPaused = false;
 
   @override
   Widget build(BuildContext context) {
-    return ConsumingProvider(
-      create: (_) => PlayerModel(),
-      builder: (_, model, __) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PlayerModel()),
+        if (playback != null) ChangeNotifierProvider.value(value: playback!),
+      ],
+      child: Consumer<PlayerModel>(builder: (_, model, ___) {
         this.model = model;
-        if (model.videoPlayer != null) videoPlayer = model.videoPlayer!;
         return InteractionDetector(
           onHover: updateOverlay,
           child: EnhancedMouseRegion(
@@ -42,39 +45,24 @@ class _PlayerState extends State<Player> {
                     model.openedPopup = null;
                     return;
                   }
-                  switchPlayback();
+                  playback?.switchPause();
                 },
                 onDoubleTap: switchFullscreen,
                 child: VideoPlayer(
-                  onProgressed: (progress) => setState(() => model.progress = progress),
-                  onPlayed: updateOverlay,
-                  onPaused: updateOverlay,
-                  setController: (controller) => model.videoPlayer = controller,
+                  onPlaybackChange: onPlaybackChange,
                   onVolumeChanged: (newValue) => model.volume = newValue,
                 ),
               ),
               EnhancedAnimatedOpacity(
                 opacity: showOverlay ? 1 : 0,
                 duration: const Duration(milliseconds: 200),
-                child: PlayerOverlay(progress: model.progress, onSeek: seek),
+                child: const PlayerOverlay(),
               ),
             ]),
           ),
         );
-      },
+      }),
     );
-  }
-
-  switchPlayback() {
-    if (videoPlayer.isPaused) {
-      videoPlayer.play();
-    } else {
-      videoPlayer.pause();
-    }
-  }
-
-  seek(double destination) {
-    videoPlayer.seek(destination);
   }
 
   updateOverlay() {
@@ -86,7 +74,7 @@ class _PlayerState extends State<Player> {
 
     hideOverlayTimer?.cancel();
 
-    if (videoPlayer.isPaused || model.openedPopup != null) {
+    if (playback != null || playback!.isPaused || model.openedPopup != null) {
       return;
     }
 
@@ -106,5 +94,25 @@ class _PlayerState extends State<Player> {
       final size = await windowManager.getSize();
       await windowManager.setSize(Size(size.width + 1, size.height + 1));
     }
+  }
+
+  playbackListener() {
+    final playback = this.playback!;
+    if (wasPaused != playback.isPaused) {
+      updateOverlay();
+      wasPaused = playback.isPaused;
+    }
+  }
+
+  onPlaybackChange(VideoPlayback newPlayback) {
+    playback?.removeListener(playbackListener);
+    newPlayback.addListener(playbackListener);
+    setState(() => playback = newPlayback);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    playback?.removeListener(playbackListener);
   }
 }

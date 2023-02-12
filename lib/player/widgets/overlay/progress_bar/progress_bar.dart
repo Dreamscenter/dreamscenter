@@ -7,7 +7,7 @@ class ProgressBar extends StatelessWidget {
   final double progress;
   final void Function(double) onSeek;
 
-  const ProgressBar({super.key, required this.progress, required this.onSeek});
+  const ProgressBar({super.key, required this.progress, required this.onSeek}) : assert(progress >= 0 && progress <= 1);
 
   @override
   Widget build(BuildContext context) {

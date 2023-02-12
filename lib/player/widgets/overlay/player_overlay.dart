@@ -1,14 +1,13 @@
+import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/controls.dart';
 import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_bar.dart';
 import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayerOverlay extends StatefulWidget {
-  final double progress;
-  final void Function(double) onSeek;
-
-  const PlayerOverlay({super.key, required this.progress, required this.onSeek});
+  const PlayerOverlay({super.key});
 
   @override
   State<PlayerOverlay> createState() => _PlayerOverlayState();
@@ -17,13 +16,14 @@ class PlayerOverlay extends StatefulWidget {
 class _PlayerOverlayState extends State<PlayerOverlay> {
   @override
   Widget build(BuildContext context) {
+    final videoPlayback = context.watch<VideoPlayback?>();
     return EnhancedOverlay(
       child: Stack(
         children: [
           shadow,
           controlsAndProgressBar(
             const Controls(),
-            ProgressBar(progress: widget.progress, onSeek: widget.onSeek),
+            ProgressBar(progress: videoPlayback?.progress ?? 0, onSeek: videoPlayback?.seek ?? (_) {}),
           ),
         ],
       ),
