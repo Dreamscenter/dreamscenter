@@ -1,7 +1,9 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/syncplay/syncplay_client.dart';
+import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SyncplayPopup extends StatelessWidget {
   const SyncplayPopup({super.key});
@@ -47,9 +49,10 @@ class SyncplayPopup extends StatelessWidget {
   }
 
   _enterRoom(BuildContext context) {
+    final videoPlayback = context.read<VideoPlayback?>();
     return OutlinedButton(
       onPressed: () {
-        SyncplayClient().start(
+        SyncplayClient(videoPlayback!).start(
           serverAddress: 'syncplay.pl',
           serverPassword: null,
           username: 'Gieted (Dreamscenter)',

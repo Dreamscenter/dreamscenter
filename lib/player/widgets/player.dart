@@ -40,6 +40,7 @@ class _PlayerState extends State<Player> {
             cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
             child: Stack(children: [
               InteractionDetector(
+                key: const ValueKey("player"),
                 onTapDown: () {
                   if (model.openedPopup != null) {
                     model.openedPopup = null;
@@ -49,6 +50,7 @@ class _PlayerState extends State<Player> {
                 },
                 onDoubleTap: switchFullscreen,
                 child: VideoPlayer(
+                  source: model.source,
                   onPlaybackChange: onPlaybackChange,
                   onVolumeChanged: (newValue) => model.volume = newValue,
                 ),
@@ -104,10 +106,12 @@ class _PlayerState extends State<Player> {
     }
   }
 
-  onPlaybackChange(VideoPlayback newPlayback) {
+  onPlaybackChange(VideoPlayback? newPlayback) {
     playback?.removeListener(playbackListener);
-    newPlayback.addListener(playbackListener);
     setState(() => playback = newPlayback);
+    if (newPlayback != null) {
+      newPlayback.addListener(playbackListener);
+    }
   }
 
   @override

@@ -28,11 +28,19 @@ class VideoPlayback extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _source;
+
+  String get source => _source;
+
+  set source(String newValue) {
+    _source = newValue;
+    notifyListeners();
+  }
+
   final void Function() _pauseVideo;
   final void Function() _playVideo;
   final void Function(Duration) _seekVideo;
   final void Function(double) _setVideoVolume;
-  final void Function(String) _changeVideoUrl;
 
   VideoPlayback({
     required isPaused,
@@ -42,7 +50,7 @@ class VideoPlayback extends ChangeNotifier {
     required playVideo,
     required seekVideo,
     required setVideoVolume,
-    required changeVideoUrl,
+    required source,
   })  : _isPaused = isPaused,
         _position = position,
         _duration = duration,
@@ -50,7 +58,7 @@ class VideoPlayback extends ChangeNotifier {
         _playVideo = playVideo,
         _seekVideo = seekVideo,
         _setVideoVolume = setVideoVolume,
-        _changeVideoUrl = changeVideoUrl;
+        _source = source;
 
   double get progress {
     final progress = position.inMilliseconds / duration.inMilliseconds;
@@ -89,9 +97,5 @@ class VideoPlayback extends ChangeNotifier {
     } else {
       pause();
     }
-  }
-
-  void changeUrl(String url) {
-    _changeVideoUrl(url);
   }
 }
