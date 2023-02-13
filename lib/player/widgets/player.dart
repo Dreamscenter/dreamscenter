@@ -30,7 +30,7 @@ class _PlayerState extends State<Player> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PlayerModel()),
-        if (playback != null) ChangeNotifierProvider.value(value: playback!),
+        ChangeNotifierProvider.value(value: playback),
       ],
       child: Consumer<PlayerModel>(builder: (_, model, ___) {
         this.model = model;
@@ -40,7 +40,6 @@ class _PlayerState extends State<Player> {
             cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
             child: Stack(children: [
               InteractionDetector(
-                key: const ValueKey("player"),
                 onTapDown: () {
                   if (model.openedPopup != null) {
                     model.openedPopup = null;

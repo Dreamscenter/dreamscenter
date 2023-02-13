@@ -51,21 +51,18 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void didUpdateWidget(VideoPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.source == oldWidget.source) {
-      print("source not changed");
       return;
     }
     if (widget.source == null) {
-      print("source is null");
       if (player.current.media != null) {
-        // player.stop();
-        // setState(() => player = Player(id: Random().nextInt(1000000000)));
+        player.stop();
+        player = Player(id: Random().nextInt(1000000000));
       }
       widget.onPlaybackChange(null);
       return;
     }
 
     player.open(Media.network(widget.source));
-    print("playing ${widget.source}");
     final playback = VideoPlayback(
       isPaused: false,
       position: Duration.zero,
