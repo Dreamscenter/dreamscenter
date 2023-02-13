@@ -23,23 +23,12 @@ class VideoPlayer extends StatefulWidget {
 class _VideoPlayerState extends State<VideoPlayer> {
   var player = Player(id: Random().nextInt(1000000000));
   VideoPlayback? playback;
+  Media? lastMedia;
 
   @override
   void initState() {
     super.initState();
-
-    player.positionStream.listen((event) {
-      if (event.position != null) {
-        playback?.position = event.position!;
-      }
-      if (event.duration != null) {
-        playback?.duration = event.duration!;
-      }
-    });
-
-    player.generalStream.listen((event) {
-      widget.onVolumeChanged(event.volume);
-    });
+    registerListeners();
   }
 
   @override
@@ -57,33 +46,53 @@ class _VideoPlayerState extends State<VideoPlayer> {
       if (player.current.media != null) {
         player.stop();
         player = Player(id: Random().nextInt(1000000000));
+        registerListeners();
       }
       widget.onPlaybackChange(null);
       return;
     }
 
     player.open(Media.network(widget.source));
-    final playback = VideoPlayback(
-      isPaused: false,
-      position: Duration.zero,
-      duration: Duration.zero,
-      source: widget.source,
-      playVideo: () {
-        player.play();
-      },
-      pauseVideo: () {
-        player.pause();
-      },
-      seekVideo: (position) {
-        player.seek(position);
-      },
-      setVideoVolume: (volume) {
-        player.setVolume(volume);
-      },
-    );
-    this.playback = playback;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onPlaybackChange(playback);
+  }
+
+  registerListeners() {
+    player.positionStream.listen((event) {
+      if (event.position != null) {
+        playback?.position = event.position!;
+      }
+      if (event.duration != null) {
+        playback?.duration = event.duration!;
+      }
+    });
+
+    player.generalStream.listen((event) {
+      widget.onVolumeChanged(event.volume);
+    });
+
+    player.currentStream.listen((event) {
+      if (event.media != lastMedia) {
+        final playback = VideoPlayback(
+          isPaused: false,
+          position: player.position.position,
+          duration: player.position.duration,
+          source: widget.source,
+          playVideo: () {
+            player.play();
+          },
+          pauseVideo: () {
+            player.pause();
+          },
+          seekVideo: (position) {
+            player.seek(position);
+          },
+          setVideoVolume: (volume) {
+            player.setVolume(volume);
+          },
+        );
+        this.playback = playback;
+        lastMedia = event.media;
+        widget.onPlaybackChange(playback);
+      }
     });
   }
 
