@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 
 class SyncplayClient {
-  final VideoPlayback _playback;
+  final PlayerModel _playerModel;
+  VideoPlayback? _playback;
   IOSink? _stdin;
   String? _lastSource;
 
-  SyncplayClient(this._playback);
+  SyncplayClient(this._playerModel);
 
   Future<void> start({
     required String serverAddress,
@@ -18,6 +20,8 @@ class SyncplayClient {
     required String username,
     required String room,
   }) async {
+    _playerModel.addListener(_onPlayerModelChange);
+
     const syncplayDirectory = 'syncplay';
     final pythonPath = join(syncplayDirectory, 'venv', 'Scripts', 'python.exe');
     final process = await Process.start(pythonPath, ['-m', 'dreamscenter.main'], workingDirectory: syncplayDirectory);
@@ -45,13 +49,6 @@ class SyncplayClient {
     }
 
     _stdin = process.stdin;
-
-    _playback.addListener(() {
-      if (_playback.source != _lastSource) {
-        updateFile(_playback.source, _playback.duration, _playback.source);
-      }
-      _lastSource = _playback.source;
-    });
   }
 
   updateFile(String name, Duration duration, String path) {
@@ -79,8 +76,8 @@ class SyncplayClient {
 
   _handleAskForStatus(dynamic command) {
     final response = {
-      "isPaused": _playback.isPaused,
-      "position": _playback.position.inMilliseconds,
+      "isPaused": _playback?.isPaused ?? true,
+      "position": _playback?.position.inMilliseconds ?? 0,
     };
 
     _sendMessageToSyncplay(response);
@@ -89,14 +86,26 @@ class SyncplayClient {
   void _handleSetPaused(dynamic command) {
     final value = command['value'];
     if (value) {
-      _playback.pause();
+      _playback?.pause();
     } else {
-      _playback.play();
+      _playback?.play();
     }
   }
 
   _sendMessageToSyncplay(dynamic response) {
     final message = "Dreamscenter >> ${jsonEncode(response)}\n";
     _stdin!.write(message);
+  }
+
+  _onPlayerModelChange() {
+    if (_playerModel.playback != _playback && _playerModel.playback != null) {
+      _playerModel.playback!.addListener(() {
+        if (_playback!.source != _lastSource) {
+          updateFile(_playback!.source, _playback!.duration, _playback!.source);
+        }
+        _lastSource = _playback!.source;
+      });
+    }
+    _playback = _playerModel.playback;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
 import 'package:flutter/foundation.dart';
 
@@ -26,6 +27,15 @@ class PlayerModel extends ChangeNotifier {
 
   set volume(double newValue) {
     _volume = newValue;
+    notifyListeners();
+  }
+
+  VideoPlayback? _playback;
+
+  VideoPlayback? get playback => _playback;
+
+  set playback(VideoPlayback? newValue) {
+    _playback = newValue;
     notifyListeners();
   }
 }

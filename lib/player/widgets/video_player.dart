@@ -48,6 +48,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
         player = Player(id: Random().nextInt(1000000000));
         registerListeners();
       }
+      playback?.dispose();
       widget.onPlaybackChange(null);
       return;
     }
