@@ -36,16 +36,6 @@ class SyncplayClient {
     }
   }
 
-  updateFile(String name, Duration duration, String path) {
-    final command = {
-      "command": "updateFile",
-      "name": name,
-      "duration": duration.inMilliseconds,
-      "path": path,
-    };
-    _sendMessageToSyncplay(command);
-  }
-
   _onSyncplayMessage(String message) {
     if (!message.startsWith('Dreamscenter << ')) {
       if (kDebugMode) {
@@ -65,13 +55,18 @@ class SyncplayClient {
       case 'setPaused':
         _handleSetPaused(parsedCommand);
         break;
+      case 'setPosition':
+        _handleSetPosition(parsedCommand);
+        break;
     }
   }
 
   _handleAskForStatus(dynamic command) {
     final response = {
       "isPaused": _playback?.isPaused ?? true,
-      "position": _playback?.position.inMilliseconds ?? 0,
+      "position": _playback != null ? (_playback!.position.inMicroseconds / 1000000) : 0,
+      "fileName": _playback?.source,
+      "duration": _playback?.duration.inSeconds ?? 0,
     };
 
     _sendMessageToSyncplay(response);
@@ -87,6 +82,12 @@ class SyncplayClient {
     _sendMessageToSyncplay({});
   }
 
+  void _handleSetPosition(dynamic command) {
+    double value = command['value'];
+    _playback?.seekTo(Duration(microseconds: (value * 1000000).toInt()));
+    _sendMessageToSyncplay({});
+  }
+
   _sendMessageToSyncplay(dynamic response) {
     final message = "Dreamscenter >> ${jsonEncode(response)}\n";
     _process!.stdin.write(message);
@@ -95,9 +96,7 @@ class SyncplayClient {
   _onPlayerModelChange() {
     if (_playerModel.playback != _playback && _playerModel.playback != null) {
       _playerModel.playback!.addListener(() {
-        if (_playback!.source != _lastSource) {
-          // updateFile(_playback!.source, _playback!.duration, _playback!.source);
-        }
+        if (_playback!.source != _lastSource) {}
         _lastSource = _playback!.source;
       });
     }

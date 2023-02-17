@@ -78,6 +78,11 @@ class VideoPlayback extends ChangeNotifier {
     position = newPosition;
   }
 
+  void seekTo(Duration newPosition) {
+    _seekVideo(newPosition);
+    position = newPosition;
+  }
+
   void fastForward(Duration duration) {
     _seekVideo(position + duration);
   }
