@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dreamscenter/extensions/stream_extension.dart';
 import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 
 class SyncplayClient {
   final PlayerModel _playerModel;
   VideoPlayback? _playback;
-  IOSink? _stdin;
   String? _lastSource;
+  Process? _process;
 
   SyncplayClient(this._playerModel);
 
@@ -23,32 +24,16 @@ class SyncplayClient {
     _playerModel.addListener(_onPlayerModelChange);
 
     const syncplayDirectory = 'syncplay';
-    final pythonPath = join(syncplayDirectory, 'venv', 'Scripts', 'python.exe');
-    final process = await Process.start(pythonPath, ['-m', 'dreamscenter.main'], workingDirectory: syncplayDirectory);
-    process.stdout.listen((event) {
-      const inToken = 'Dreamscenter << ';
-      final messages = String.fromCharCodes(event);
-      for (final message in messages.split('\n')) {
-        if (!message.startsWith(inToken)) {
-          if (message.isNotEmpty) {
-            print(message);
-          }
-          continue;
-        }
-
-        final command = message.substring(inToken.length);
-        _handleCommand(command);
-      }
-    });
+    final pythonPath = path.join(syncplayDirectory, 'venv', 'Scripts', 'python.exe');
+    _process = await Process.start(pythonPath, ['-m', 'dreamscenter.main'], workingDirectory: syncplayDirectory);
+    _process!.stdout.lines().listen(_onSyncplayMessage);
 
     if (kDebugMode) {
-      process.stderr.listen((event) {
+      _process!.stderr.lines().listen((message) {
         // ignore: avoid_print
-        print(String.fromCharCodes(event));
+        print("[ERROR] Syncplay: $message");
       });
     }
-
-    _stdin = process.stdin;
   }
 
   updateFile(String name, Duration duration, String path) {
@@ -61,7 +46,16 @@ class SyncplayClient {
     _sendMessageToSyncplay(command);
   }
 
-  _handleCommand(String command) {
+  _onSyncplayMessage(String message) {
+    if (!message.startsWith('Dreamscenter << ')) {
+      if (kDebugMode) {
+        print('Syncplay: $message');
+      }
+
+      return;
+    }
+
+    final command = message.substring('Dreamscenter << '.length);
     final parsedCommand = jsonDecode(command);
     final String commandId = parsedCommand['command'];
     switch (commandId) {
@@ -90,18 +84,19 @@ class SyncplayClient {
     } else {
       _playback?.play();
     }
+    _sendMessageToSyncplay({});
   }
 
   _sendMessageToSyncplay(dynamic response) {
     final message = "Dreamscenter >> ${jsonEncode(response)}\n";
-    _stdin!.write(message);
+    _process!.stdin.write(message);
   }
 
   _onPlayerModelChange() {
     if (_playerModel.playback != _playback && _playerModel.playback != null) {
       _playerModel.playback!.addListener(() {
         if (_playback!.source != _lastSource) {
-          updateFile(_playback!.source, _playback!.duration, _playback!.source);
+          // updateFile(_playback!.source, _playback!.duration, _playback!.source);
         }
         _lastSource = _playback!.source;
       });

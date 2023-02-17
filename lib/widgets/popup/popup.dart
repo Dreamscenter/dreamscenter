@@ -19,7 +19,7 @@ class _PopupState extends State<Popup> {
   @override
   void initState() {
     super.initState();
-    overlayState = Overlay.of(context)!;
+    overlayState = Overlay.of(context);
     overlayEntry = createOverlayEntry(overlayState);
     if (widget.opened) updatePopup();
   }

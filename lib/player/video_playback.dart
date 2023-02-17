@@ -5,11 +5,6 @@ class VideoPlayback extends ChangeNotifier {
 
   bool get isPaused => _isPaused;
 
-  set isPaused(bool newValue) {
-    _isPaused = newValue;
-    notifyListeners();
-  }
-
   Duration _position;
 
   Duration get position => _position;
@@ -66,13 +61,15 @@ class VideoPlayback extends ChangeNotifier {
   }
 
   void play() {
-    isPaused = false;
+    _isPaused = false;
     _playVideo();
+    notifyListeners();
   }
 
   void pause() {
-    isPaused = true;
+    _isPaused = true;
     _pauseVideo();
+    notifyListeners();
   }
 
   void seek(double newProgress) {

@@ -108,6 +108,7 @@ class _PlayerState extends State<Player> {
   onPlaybackChange(VideoPlayback? newPlayback) {
     playback?.removeListener(playbackListener);
     setState(() => playback = newPlayback);
+    model.playback = newPlayback;
     if (newPlayback != null) {
       newPlayback.addListener(playbackListener);
     }
