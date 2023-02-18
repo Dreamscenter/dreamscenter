@@ -14,6 +14,7 @@ class SyncplayClient {
   final SyncplayModel syncplayModel;
   VideoPlayback? _playback;
   Process? _process;
+  File? logFile;
 
   SyncplayClient(this._playerModel, this.syncplayModel);
 
@@ -23,6 +24,8 @@ class SyncplayClient {
     required String username,
     required String room,
   }) async {
+    logFile = File('log.txt');
+
     _playerModel.addListener(_onPlayerModelChange);
 
     const syncplayDirectory = 'syncplay';
@@ -41,18 +44,21 @@ class SyncplayClient {
         workingDirectory: syncplayDirectory);
     _process!.stdout.lines().listen(_onSyncplayMessage);
 
-    if (kDebugMode) {
-      _process!.stderr.lines().listen((message) {
-        // ignore: avoid_print
+    _process!.stderr.lines().listen((message) {
+      if (kDebugMode) {
         print("[ERROR] Syncplay: $message");
-      });
-    }
+      } else {
+        logFile!.writeAsStringSync("[ERROR] Syncplay: $message", mode: FileMode.append);
+      }
+    });
   }
 
   _onSyncplayMessage(String message) {
     if (!message.startsWith('Dreamscenter << ')) {
       if (kDebugMode) {
         print('Syncplay: $message');
+      } else {
+        logFile!.writeAsStringSync('Syncplay: $message', mode: FileMode.append);
       }
 
       return;
