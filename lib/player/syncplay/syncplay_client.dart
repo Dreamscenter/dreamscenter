@@ -25,7 +25,18 @@ class SyncplayClient {
 
     const syncplayDirectory = 'syncplay';
     final pythonPath = path.join(syncplayDirectory, 'venv', 'Scripts', 'python.exe');
-    _process = await Process.start(pythonPath, ['-m', 'dreamscenter.main'], workingDirectory: syncplayDirectory);
+    _process = await Process.start(
+        pythonPath,
+        [
+          '-m',
+          'dreamscenter.main',
+          serverAddress.split(":")[0],
+          serverAddress.split(":")[1],
+          serverPassword ?? "null",
+          username,
+          room,
+        ],
+        workingDirectory: syncplayDirectory);
     _process!.stdout.lines().listen(_onSyncplayMessage);
 
     if (kDebugMode) {

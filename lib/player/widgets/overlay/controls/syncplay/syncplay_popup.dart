@@ -5,8 +5,21 @@ import 'package:dreamscenter/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SyncplayPopup extends StatelessWidget {
+class SyncplayPopup extends StatefulWidget {
   const SyncplayPopup({super.key});
+
+  @override
+  State<SyncplayPopup> createState() => _SyncplayPopupState();
+}
+
+class _SyncplayPopupState extends State<SyncplayPopup> {
+  late TextEditingController serverAddressController;
+
+  late TextEditingController serverPasswordController;
+
+  late TextEditingController usernameController;
+
+  late TextEditingController roomController;
 
   @override
   Widget build(BuildContext context) {
@@ -24,28 +37,44 @@ class SyncplayPopup extends StatelessWidget {
   }
 
   _form() {
+    const spacing = 10.0;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _textField('Server address'),
-        _textField('Server password (if any)'),
-        _textField('Username'),
-        _textField('Room'),
+        _textField('Server address', (controller) => serverAddressController = controller,
+            initialValue: "syncplay.pl:8997"),
+        const SizedBox(height: spacing),
+        _textField('Server password', (controller) => serverPasswordController = controller),
+        const SizedBox(height: spacing),
+        _textField('Username', (controller) => usernameController = controller),
+        const SizedBox(height: spacing),
+        _textField('Room', (controller) => roomController = controller, initialValue: "Dreamscenter"),
       ],
     );
   }
 
-  _textField(String label) {
-    return TextField(
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.white),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: DefaultColors.primaryDark),
-        ),
-      ),
-    );
+  _textField(String label, void Function(TextEditingController) updateController, {String? initialValue}) {
+    return Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          return [];
+        },
+        initialValue: initialValue != null ? TextEditingValue(text: initialValue) : null,
+        fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+          updateController(controller);
+          return TextField(
+            controller: controller,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: label,
+              filled: true,
+              labelStyle: const TextStyle(color: Colors.white),
+              fillColor: Colors.black.withOpacity(0.1),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: DefaultColors.primaryDark),
+              ),
+            ),
+          );
+        });
   }
 
   _enterRoom(BuildContext context) {
@@ -53,10 +82,10 @@ class SyncplayPopup extends StatelessWidget {
     return OutlinedButton(
       onPressed: () {
         SyncplayClient(playerModel).start(
-          serverAddress: 'syncplay.pl',
-          serverPassword: null,
-          username: 'Gieted (Dreamscenter)',
-          room: 'Gieted',
+          serverAddress: serverAddressController.text,
+          serverPassword: serverPasswordController.text,
+          username: usernameController.text,
+          room: roomController.text,
         );
       },
       style: OutlinedButton.styleFrom(
