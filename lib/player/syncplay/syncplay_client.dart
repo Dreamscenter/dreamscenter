@@ -48,7 +48,7 @@ class SyncplayClient {
       if (kDebugMode) {
         print("[ERROR] Syncplay: $message");
       } else {
-        logFile!.writeAsStringSync("[ERROR] Syncplay: $message", mode: FileMode.append);
+        logFile!.writeAsStringSync("[ERROR] Syncplay: $message\n", mode: FileMode.append);
       }
     });
   }
@@ -58,7 +58,7 @@ class SyncplayClient {
       if (kDebugMode) {
         print('Syncplay: $message');
       } else {
-        logFile!.writeAsStringSync('Syncplay: $message', mode: FileMode.append);
+        logFile!.writeAsStringSync('Syncplay: $message\n', mode: FileMode.append);
       }
 
       return;
