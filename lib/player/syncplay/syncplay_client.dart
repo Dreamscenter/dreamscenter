@@ -1,19 +1,21 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dreamscenter/extensions/stream_extension.dart';
 import 'package:dreamscenter/player/player_model.dart';
+import 'package:dreamscenter/player/syncplay/syncplay_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 
 class SyncplayClient {
   final PlayerModel _playerModel;
+  final SyncplayModel syncplayModel;
   VideoPlayback? _playback;
-  String? _lastSource;
   Process? _process;
 
-  SyncplayClient(this._playerModel);
+  SyncplayClient(this._playerModel, this.syncplayModel);
 
   Future<void> start({
     required String serverAddress,
@@ -69,6 +71,18 @@ class SyncplayClient {
       case 'setPosition':
         _handleSetPosition(parsedCommand);
         break;
+      case 'showUserList':
+        _handleShowUserList(parsedCommand);
+        break;
+      case 'openFile':
+        _handleOpenFile(parsedCommand);
+        break;
+      case 'setSpeed':
+        _handleSetSpeed(parsedCommand);
+        break;
+      case 'setPlaylist':
+        _handleSetPlaylist(parsedCommand);
+        break;
     }
   }
 
@@ -78,6 +92,7 @@ class SyncplayClient {
       "position": _playback != null ? (_playback!.position.inMicroseconds / 1000000) : 0,
       "fileName": _playback?.source,
       "duration": _playback?.duration.inSeconds ?? 0,
+      "playlist": syncplayModel.urls,
     };
 
     _sendMessageToSyncplay(response);
@@ -99,18 +114,52 @@ class SyncplayClient {
     _sendMessageToSyncplay({});
   }
 
+  void _handleShowUserList(dynamic parsedCommand) {
+    final users = parsedCommand['users'];
+    final typedUsers = <String>[];
+    for (final user in users) {
+      typedUsers.add(user);
+    }
+    syncplayModel.users = typedUsers;
+
+    final currentUser = parsedCommand['currentUser'];
+    syncplayModel.currentUser = currentUser;
+    _sendMessageToSyncplay({});
+  }
+
+  void _handleOpenFile(dynamic parsedCommand) {
+    final url = parsedCommand['filePath'];
+    _playerModel.source = url;
+    _sendMessageToSyncplay({});
+  }
+
+  void _handleSetSpeed(dynamic parsedCommand) {
+    final speed = parsedCommand['speed'];
+    _playback?.setSpeed(speed ?? 1);
+    _sendMessageToSyncplay({});
+  }
+
+  void _handleSetPlaylist(dynamic parsedCommand) {
+    final playlist = parsedCommand['playlist'];
+    final typedPlaylist = <String>[];
+    for (final item in playlist) {
+      typedPlaylist.add(item);
+    }
+    syncplayModel.urls = typedPlaylist;
+    _sendMessageToSyncplay({});
+  }
+
   _sendMessageToSyncplay(dynamic response) {
     final message = "Dreamscenter >> ${jsonEncode(response)}\n";
     _process!.stdin.write(message);
   }
 
   _onPlayerModelChange() {
-    if (_playerModel.playback != _playback && _playerModel.playback != null) {
-      _playerModel.playback!.addListener(() {
-        if (_playback!.source != _lastSource) {}
-        _lastSource = _playback!.source;
+    if (_playerModel.playback != _playback) {
+      _playback = _playerModel.playback;
+      Timer(const Duration(seconds: 1), () {
+        _playback!.pause();
       });
     }
-    _playback = _playerModel.playback;
   }
 }

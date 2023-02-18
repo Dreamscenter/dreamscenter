@@ -89,6 +89,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
           setVideoVolume: (volume) {
             player.setVolume(volume);
           },
+          setVideoSpeed: (speed) {
+            player.setRate(speed);
+          },
         );
         this.playback = playback;
         lastMedia = event.media;

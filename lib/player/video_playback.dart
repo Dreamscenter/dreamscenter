@@ -36,6 +36,7 @@ class VideoPlayback extends ChangeNotifier {
   final void Function() _playVideo;
   final void Function(Duration) _seekVideo;
   final void Function(double) _setVideoVolume;
+  final void Function(double) _setVideoSpeed;
 
   VideoPlayback({
     required isPaused,
@@ -46,6 +47,7 @@ class VideoPlayback extends ChangeNotifier {
     required seekVideo,
     required setVideoVolume,
     required source,
+    required setVideoSpeed,
   })  : _isPaused = isPaused,
         _position = position,
         _duration = duration,
@@ -53,11 +55,12 @@ class VideoPlayback extends ChangeNotifier {
         _playVideo = playVideo,
         _seekVideo = seekVideo,
         _setVideoVolume = setVideoVolume,
-        _source = source;
+        _source = source,
+        _setVideoSpeed = setVideoSpeed;
 
   double get progress {
-    final progress = position.inMilliseconds / duration.inMilliseconds;
-    return progress.isNaN ? 0 : progress;
+    if (duration == Duration.zero) return 0;
+    return position.inMilliseconds / duration.inMilliseconds;
   }
 
   void play() {
@@ -99,5 +102,9 @@ class VideoPlayback extends ChangeNotifier {
     } else {
       pause();
     }
+  }
+
+  void setSpeed(double speed) {
+    _setVideoSpeed(speed);
   }
 }
