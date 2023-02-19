@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:win32/win32.dart';
-import 'package:win32/win32.dart' as win32;
 
-class EnhancedMouseRegion extends StatefulWidget {
+class EnhancedMouseRegionImpl extends StatefulWidget {
   final Function(PointerEnterEvent)? onEnter;
   final Function(PointerExitEvent)? onExit;
   final Function(PointerHoverEvent)? onHover;
@@ -16,7 +16,7 @@ class EnhancedMouseRegion extends StatefulWidget {
   final HitTestBehavior? hitTestBehavior;
   final Widget? child;
 
-  const EnhancedMouseRegion({
+  const EnhancedMouseRegionImpl({
     super.key,
     this.onEnter,
     this.onExit,
@@ -28,19 +28,19 @@ class EnhancedMouseRegion extends StatefulWidget {
   });
 
   @override
-  State<EnhancedMouseRegion> createState() => _EnhancedMouseRegionState();
+  State<EnhancedMouseRegionImpl> createState() => _EnhancedMouseRegionImplState();
 }
 
-class _EnhancedMouseRegionState extends State<EnhancedMouseRegion> {
+class _EnhancedMouseRegionImplState extends State<EnhancedMouseRegionImpl> {
   MouseCursor? lastCursor;
 
   @override
   Widget build(BuildContext context) {
-    if (lastCursor != widget.cursor) {
+    if (lastCursor != widget.cursor && Platform.isWindows) {
       Timer(const Duration(milliseconds: 100), () {
         Pointer<POINT> point = malloc();
-        win32.GetCursorPos(point);
-        win32.SetCursorPos(point.ref.x, point.ref.y);
+        GetCursorPos(point);
+        SetCursorPos(point.ref.x, point.ref.y);
         free(point);
       });
     }

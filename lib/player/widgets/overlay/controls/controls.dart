@@ -1,7 +1,6 @@
 import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/source/source_control.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/syncplay/syncplay_control.dart';
 import 'package:dreamscenter/player/widgets/overlay/controls/volume/volume_control.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,18 +36,7 @@ class Controls extends StatelessWidget {
                 playerModel.openedPopup = null;
               }
             },
-          ),
-          const SizedBox(width: buttonSpacing),
-          SyncplayControl(
-            showPopup: playerModel.openedPopup == ControlPopup.syncplay,
-            onOpenPopup: () {
-              if (playerModel.openedPopup != ControlPopup.syncplay) {
-                playerModel.openedPopup = ControlPopup.syncplay;
-              } else {
-                playerModel.openedPopup = null;
-              }
-            },
-          ),
+          )
         ],
       ),
     );

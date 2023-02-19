@@ -1,4 +1,4 @@
-import 'package:dreamscenter/widgets/enhanced_mouse_region.dart';
+import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:flutter/widgets.dart';
 
 class InteractionDetector extends StatelessWidget {
