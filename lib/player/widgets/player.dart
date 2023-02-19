@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/player_model.dart';
-import 'package:dreamscenter/player/syncplay/syncplay_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/widgets/video_player/video_player.dart'
@@ -34,7 +33,6 @@ class _PlayerState extends State<Player> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PlayerModel()),
-        ChangeNotifierProvider(create: (_) => SyncplayModel()),
         ChangeNotifierProvider.value(value: playback),
       ],
       child: Consumer<PlayerModel>(builder: (_, model, __) {
