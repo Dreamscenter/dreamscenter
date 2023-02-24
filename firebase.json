@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "player",
+    "site": "dreamscenter-player",
     "public": "build/web",
     "ignore": [
       "firebase.json",
