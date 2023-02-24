@@ -39,23 +39,24 @@ class VideoPlayback extends ChangeNotifier {
   final void Function(double) _setVideoSpeed;
 
   VideoPlayback({
-    required isPaused,
-    required position,
-    required duration,
-    required pauseVideo,
-    required playVideo,
-    required seekVideo,
-    required setVideoVolume,
-    required source,
-    required setVideoSpeed,
-  })  : _isPaused = isPaused,
+    required bool isPaused,
+    required Duration position,
+    required Duration duration,
+    required String source,
+    required void Function() pauseVideo,
+    required void Function() playVideo,
+    required void Function(Duration) seekVideo,
+    required void Function(double) setVideoVolume,
+    required void Function(double) setVideoSpeed,
+  })
+      : _isPaused = isPaused,
         _position = position,
         _duration = duration,
+        _source = source,
         _pauseVideo = pauseVideo,
         _playVideo = playVideo,
         _seekVideo = seekVideo,
         _setVideoVolume = setVideoVolume,
-        _source = source,
         _setVideoSpeed = setVideoSpeed;
 
   double get progress {

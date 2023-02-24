@@ -23,9 +23,9 @@ class InteractionDetector extends StatelessWidget {
   Widget build(BuildContext context) {
     final widget = Listener(
       onPointerHover: onHover != null ? (_) => onHover!() : null,
+      onPointerDown: (_) => onTapDown != null ? onTapDown!() : null,
       child: GestureDetector(
         onTap: onTap,
-        onTapDown: (_) => onTapDown != null ? onTapDown!() : null,
         onDoubleTap: onDoubleTap,
         child: child,
       ),

@@ -111,10 +111,10 @@ packages:
     dependency: "direct main"
     description:
       name: font_awesome_flutter
-      sha256: "875dbb9ec1ad30d68102019ceb682760d06c72747c1c5b7885781b95f88569cc"
+      sha256: "959ef4add147753f990b4a7c6cccb746d5792dbdc81b1cde99e62e7edb31b206"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.0"
+    version: "10.4.0"
   js:
     dependency: transitive
     description:
@@ -183,10 +183,10 @@ packages:
     dependency: transitive
     description:
       name: screen_retriever
-      sha256: b2d23e3cf48ca735fe9edb2dabe9e7e7c3d7acb5d645e382b9b8f5248dd0d165
+      sha256: "4931f226ca158123ccd765325e9fbf360bfed0af9b460a10f960f9bb13d58323"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.6"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -260,10 +260,10 @@ packages:
     dependency: "direct main"
     description:
       name: window_manager
-      sha256: "5a7bda81b8b8e5feb733d07f4bd174e64dfb412031aff5314a375118e42b498e"
+      sha256: d812d3189d23465d2e94baa2505a4462b46dde4939012ff370711c6897d747ae
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.9"
 sdks:
-  dart: ">=2.18.6 <4.0.0"
-  flutter: ">=2.0.0"
+  dart: ">=2.18.6 <3.0.0"
+  flutter: ">=2.5.0"

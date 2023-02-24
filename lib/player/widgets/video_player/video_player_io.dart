@@ -74,9 +74,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
       if (event.media != lastMedia) {
         final playback = VideoPlayback(
           isPaused: false,
-          position: player.position.position,
-          duration: player.position.duration,
-          source: widget.source,
+          position: player.position.position!,
+          duration: player.position.duration!,
+          source: widget.source!,
           playVideo: () {
             player.play();
           },
