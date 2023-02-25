@@ -1,5 +1,5 @@
+import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/video_playback.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
 import 'package:flutter/foundation.dart';
 
 class PlayerModel extends ChangeNotifier {

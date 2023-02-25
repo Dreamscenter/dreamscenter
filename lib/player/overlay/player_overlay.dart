@@ -1,6 +1,6 @@
+import 'package:dreamscenter/player/overlay/controls/controls.dart';
+import 'package:dreamscenter/player/overlay/progress_bar/progress_bar.dart';
 import 'package:dreamscenter/player/video_playback.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/controls.dart';
-import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_bar.dart';
 import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
 import 'package:flutter/material.dart';

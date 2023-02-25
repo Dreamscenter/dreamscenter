@@ -1,7 +1,7 @@
+import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
+import 'package:dreamscenter/player/overlay/controls/source/source_control.dart';
+import 'package:dreamscenter/player/overlay/controls/volume/volume_control.dart';
 import 'package:dreamscenter/player/player_model.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/control_popup.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/source/source_control.dart';
-import 'package:dreamscenter/player/widgets/overlay/controls/volume/volume_control.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

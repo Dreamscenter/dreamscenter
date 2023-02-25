@@ -1,5 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
-import 'package:dreamscenter/player/widgets/overlay/progress_bar/progress_indicator.dart';
+import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:flutter/widgets.dart';
 

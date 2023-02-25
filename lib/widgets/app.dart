@@ -1,4 +1,4 @@
-import 'package:dreamscenter/player/widgets/player.dart';
+import 'package:dreamscenter/player/player.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {

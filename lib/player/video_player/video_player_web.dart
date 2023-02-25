@@ -1,7 +1,7 @@
 import 'dart:html';
 
 import 'package:dreamscenter/player/video_playback.dart';
-import 'package:dreamscenter/player/widgets/video_player/shims/dart_ui.dart' as ui;
+import 'package:dreamscenter/player/video_player/shims/dart_ui.dart' as ui;
 import 'package:flutter/material.dart';
 
 class VideoPlayer extends StatefulWidget {

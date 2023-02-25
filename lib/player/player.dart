@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
+import 'package:dreamscenter/player/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
-import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
-import 'package:dreamscenter/player/widgets/video_player/video_player.dart'
-    if (dart.library.io) 'package:dreamscenter/player/widgets/video_player/video_player_io.dart'
-    if (dart.library.html) 'package:dreamscenter/player/widgets/video_player/video_player_web.dart';
+import 'package:dreamscenter/player/video_player/video_player.dart'
+    if (dart.library.io) 'package:dreamscenter/player/video_player/video_player_io.dart'
+    if (dart.library.html) 'package:dreamscenter/player/video_player/video_player_web.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
