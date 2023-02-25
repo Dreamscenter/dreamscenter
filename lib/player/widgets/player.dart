@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
 import 'package:dreamscenter/player/player_model.dart';
 import 'package:dreamscenter/player/video_playback.dart';
 import 'package:dreamscenter/player/widgets/overlay/player_overlay.dart';
@@ -9,10 +10,8 @@ import 'package:dreamscenter/player/widgets/video_player/video_player.dart'
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:window_manager/window_manager.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -88,17 +87,6 @@ class _PlayerState extends State<Player> {
         showOverlay = false;
       });
     });
-  }
-
-  switchFullscreen() async {
-    if (kIsWeb) return;
-    final isFullscreen = await WindowManager.instance.isFullScreen();
-    await WindowManager.instance.setFullScreen(!isFullscreen);
-
-    if (isFullscreen) {
-      final size = await windowManager.getSize();
-      await windowManager.setSize(Size(size.width + 1, size.height + 1));
-    }
   }
 
   playbackListener() {
