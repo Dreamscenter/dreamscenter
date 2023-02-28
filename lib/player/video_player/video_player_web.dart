@@ -32,7 +32,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
       ..style.border = 'none'
       ..style.height = '100%'
       ..style.width = '100%'
-      ..autoplay = true;
+      ..autoplay = true
+      ..style.pointerEvents = 'none';
 
     video.addEventListener('loadedmetadata', (event) {
       playback = VideoPlayback(
@@ -73,7 +74,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: const HtmlElementView(viewType: 'videoPlayer'),
+      child: const IgnorePointer(child: HtmlElementView(viewType: 'videoPlayer')),
     );
   }
 }
