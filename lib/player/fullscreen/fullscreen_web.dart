@@ -6,19 +6,27 @@ Future<void> enterFullscreen() async {
   document.documentElement!.requestFullscreen();
 }
 
-@JS()
-@staticInterop
-class JSDocument {}
-
-extension JSDocumentExtension on JSDocument {
-  external void exitFullscreen();
-}
-
 Future<void> exitFullscreen() async {
-  final jsDocument = document as JSDocument;
-  jsDocument.exitFullscreen();
+  if (Document.exitFullscreenFunction != null) {
+    Document.exitFullscreen();
+  } else {
+    Document.webkitExitFullscreen();
+  }
 }
 
 Future<bool> isFullscreen() async {
-  return document.fullscreenElement != null;
+  return document.fullscreenElement != null || Document.webkitFullscreenElement != null;
+}
+
+@JS("document")
+@staticInterop
+class Document {
+  external static void exitFullscreen();
+
+  @JS("exitFullscreen")
+  external static Object? exitFullscreenFunction;
+
+  external static dynamic webkitFullscreenElement;
+
+  external static void webkitExitFullscreen();
 }
