@@ -5,7 +5,7 @@ import 'package:dreamscenter/player/video_player/video_player_controller.dart';
 import 'package:flutter/foundation.dart';
 
 class VideoPlayerViewModel extends ChangeNotifier {
-  bool _isPaused = false;
+  bool _isPaused = true;
   double _volume = 1.0;
   double _speed = 1.0;
   late VideoPlayerController _controller;

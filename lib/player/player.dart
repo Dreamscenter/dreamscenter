@@ -20,7 +20,7 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   Timer? hideOverlayTimer;
-  bool showOverlay = false;
+  bool showOverlay = true;
   late PlayerViewModel playerViewModel;
   late VideoPlayerViewModel videoPlayerViewModel = VideoPlayerViewModel();
   late StreamSubscription<void> pauseOrPlayEventsSubscription;
