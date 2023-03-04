@@ -1,8 +1,7 @@
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
-import 'package:dreamscenter/player/video_playback.dart';
 import 'package:flutter/foundation.dart';
 
-class PlayerModel extends ChangeNotifier {
+class PlayerViewModel extends ChangeNotifier {
   String? _source;
 
   String? get source => _source;
@@ -18,24 +17,6 @@ class PlayerModel extends ChangeNotifier {
 
   set openedPopup(ControlPopup? newValue) {
     _openedPopup = newValue;
-    notifyListeners();
-  }
-
-  double _volume = 0;
-
-  double get volume => _volume;
-
-  set volume(double newValue) {
-    _volume = newValue;
-    notifyListeners();
-  }
-
-  VideoPlayback? _playback;
-
-  VideoPlayback? get playback => _playback;
-
-  set playback(VideoPlayback? newValue) {
-    _playback = newValue;
     notifyListeners();
   }
 }

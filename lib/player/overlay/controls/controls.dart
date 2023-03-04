@@ -1,7 +1,7 @@
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/overlay/controls/source/source_control.dart';
 import 'package:dreamscenter/player/overlay/controls/volume/volume_control.dart';
-import 'package:dreamscenter/player/player_model.dart';
+import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,29 +11,29 @@ class Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const buttonSpacing = 21.0;
-    final playerModel = context.watch<PlayerModel>();
+    final playerViewModel = context.watch<PlayerViewModel>();
     return SizedBox(
       height: 24,
       child: Row(
         children: [
           VolumeControl(
-            showPopup: playerModel.openedPopup == ControlPopup.volume,
+            showPopup: playerViewModel.openedPopup == ControlPopup.volume,
             onOpenPopup: () {
-              if (playerModel.openedPopup != ControlPopup.volume) {
-                playerModel.openedPopup = ControlPopup.volume;
+              if (playerViewModel.openedPopup != ControlPopup.volume) {
+                playerViewModel.openedPopup = ControlPopup.volume;
               } else {
-                playerModel.openedPopup = null;
+                playerViewModel.openedPopup = null;
               }
             },
           ),
           const SizedBox(width: buttonSpacing),
           SourceControl(
-            showPopup: playerModel.openedPopup == ControlPopup.source,
+            showPopup: playerViewModel.openedPopup == ControlPopup.source,
             onOpenPopup: () {
-              if (playerModel.openedPopup != ControlPopup.source) {
-                playerModel.openedPopup = ControlPopup.source;
+              if (playerViewModel.openedPopup != ControlPopup.source) {
+                playerViewModel.openedPopup = ControlPopup.source;
               } else {
-                playerModel.openedPopup = null;
+                playerViewModel.openedPopup = null;
               }
             },
           )

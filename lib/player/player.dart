@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
 import 'package:dreamscenter/player/overlay/player_overlay.dart';
-import 'package:dreamscenter/player/player_model.dart';
-import 'package:dreamscenter/player/video_playback.dart';
-import 'package:dreamscenter/player/video_player/video_player.dart'
-    if (dart.library.io) 'package:dreamscenter/player/video_player/video_player_io.dart'
-    if (dart.library.html) 'package:dreamscenter/player/video_player/video_player_web.dart';
+import 'package:dreamscenter/player/player_viewmodel.dart';
+import 'package:dreamscenter/player/video_player/video_player.dart';
+import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
@@ -23,19 +21,19 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   Timer? hideOverlayTimer;
   bool showOverlay = false;
-  late PlayerModel model;
-  VideoPlayback? playback;
-  bool wasPaused = false;
+  late PlayerViewModel playerViewModel;
+  late VideoPlayerViewModel videoPlayerViewModel = VideoPlayerViewModel();
+  late StreamSubscription<void> pauseOrPlayEventsSubscription;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PlayerModel()),
-        ChangeNotifierProvider.value(value: playback),
+        ChangeNotifierProvider(create: (_) => PlayerViewModel()),
+        ChangeNotifierProvider.value(value: videoPlayerViewModel),
       ],
-      child: Consumer<PlayerModel>(builder: (_, model, __) {
-        this.model = model;
+      child: Consumer<PlayerViewModel>(builder: (context, model, __) {
+        playerViewModel = model;
         return InteractionDetector(
           onHover: updateOverlay,
           child: EnhancedMouseRegion(
@@ -43,17 +41,16 @@ class _PlayerState extends State<Player> {
             child: Stack(children: [
               InteractionDetector(
                 onTapDown: () {
-                  if (model.openedPopup != null) {
-                    model.openedPopup = null;
+                  if (playerViewModel.openedPopup != null) {
+                    playerViewModel.openedPopup = null;
                     return;
                   }
-                  playback?.switchPause();
+                  videoPlayerViewModel.switchPause();
                 },
                 onDoubleTap: switchFullscreen,
                 child: VideoPlayer(
                   source: model.source,
-                  onPlaybackChange: onPlaybackChange,
-                  onVolumeChanged: (newValue) => model.volume = newValue,
+                  viewModel: videoPlayerViewModel,
                 ),
               ),
               EnhancedAnimatedOpacity(
@@ -68,7 +65,7 @@ class _PlayerState extends State<Player> {
     );
   }
 
-  updateOverlay() {
+  void updateOverlay() {
     if (!showOverlay) {
       setState(() {
         showOverlay = true;
@@ -77,7 +74,7 @@ class _PlayerState extends State<Player> {
 
     hideOverlayTimer?.cancel();
 
-    if (playback == null || playback!.isPaused || model.openedPopup != null) {
+    if (videoPlayerViewModel.isPaused || playerViewModel.openedPopup != null) {
       return;
     }
 
@@ -89,27 +86,18 @@ class _PlayerState extends State<Player> {
     });
   }
 
-  playbackListener() {
-    final playback = this.playback!;
-    if (wasPaused != playback.isPaused) {
+  @override
+  void initState() {
+    super.initState();
+    pauseOrPlayEventsSubscription = videoPlayerViewModel.pauseOrPlayEvents.listen((event) {
       updateOverlay();
-      wasPaused = playback.isPaused;
-    }
-  }
-
-  onPlaybackChange(VideoPlayback? newPlayback) {
-    playback?.removeListener(playbackListener);
-    setState(() => playback = newPlayback);
-    model.playback = newPlayback;
-    if (newPlayback != null) {
-      newPlayback.addListener(playbackListener);
-    }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     hideOverlayTimer?.cancel();
-    playback?.removeListener(playbackListener);
+    pauseOrPlayEventsSubscription.cancel();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
-import 'package:dreamscenter/player/player_model.dart';
-import 'package:dreamscenter/player/video_playback.dart';
+import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,14 +8,13 @@ class VolumePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerModel = context.watch<PlayerModel>();
-    final videoPlayback = context.read<VideoPlayback?>();
+    final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return SizedBox(
       width: 200,
       height: 20,
       child: Slider(
-        value: playerModel.volume,
-        onChanged: videoPlayback?.setVolume,
+        value: videoPlayerViewModel.volume,
+        onChanged: videoPlayerViewModel.setVolume,
         activeColor: DefaultColors.primaryDark,
         inactiveColor: DefaultColors.primaryDark.withOpacity(0.5),
       ),
