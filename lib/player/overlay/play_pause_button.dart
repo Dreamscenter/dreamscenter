@@ -1,3 +1,4 @@
+import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,9 @@ class PlayPauseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
-    return FaIcon(videoPlayerViewModel.isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause);
+    return FaIcon(
+      videoPlayerViewModel.isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause,
+      color: DefaultColors.primaryDark,
+    );
   }
 }
