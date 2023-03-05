@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
 import 'package:dreamscenter/player/overlay/player_overlay.dart';
+import 'package:dreamscenter/player/overlay_hider.dart';
 import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
@@ -19,85 +18,63 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-  Timer? hideOverlayTimer;
-  bool showOverlay = true;
-  late PlayerViewModel playerViewModel;
-  late VideoPlayerViewModel videoPlayerViewModel = VideoPlayerViewModel();
-  late StreamSubscription<void> pauseOrPlayEventsSubscription;
+  PlayerViewModel playerViewModel = PlayerViewModel();
+  VideoPlayerViewModel videoPlayerViewModel = VideoPlayerViewModel();
+  late OverlayHider overlayHider;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PlayerViewModel()),
+        ChangeNotifierProvider.value(value: playerViewModel),
         ChangeNotifierProvider.value(value: videoPlayerViewModel),
       ],
-      child: Consumer<PlayerViewModel>(builder: (context, model, __) {
-        playerViewModel = model;
-        return InteractionDetector(
-          onHover: updateOverlay,
-          child: EnhancedMouseRegion(
-            cursor: showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
-            child: Stack(children: [
-              InteractionDetector(
-                onTapDown: () {
-                  if (playerViewModel.openedPopup != null) {
-                    playerViewModel.openedPopup = null;
-                    return;
-                  }
-                  videoPlayerViewModel.switchPause();
-                },
-                onDoubleTap: switchFullscreen,
-                child: VideoPlayer(
-                  source: model.source,
-                  viewModel: videoPlayerViewModel,
+      child: Consumer<PlayerViewModel>(builder: (_, __, ___) {
+        return AnimatedBuilder(
+            animation: overlayHider,
+            builder: (_, __) {
+              return InteractionDetector(
+                onHover: overlayHider.onMouseMovement,
+                child: EnhancedMouseRegion(
+                  cursor: overlayHider.showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
+                  child: Stack(children: [
+                    InteractionDetector(
+                      onTapDown: () {
+                        if (playerViewModel.openedPopup != null) {
+                          playerViewModel.openedPopup = null;
+                          return;
+                        }
+                        videoPlayerViewModel.switchPause();
+                      },
+                      onDoubleTap: switchFullscreen,
+                      child: VideoPlayer(
+                        source: playerViewModel.source,
+                        viewModel: videoPlayerViewModel,
+                      ),
+                    ),
+                    EnhancedAnimatedOpacity(
+                      opacity: overlayHider.showOverlay ? 1 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const PlayerOverlay(),
+                    ),
+                  ]),
                 ),
-              ),
-              EnhancedAnimatedOpacity(
-                opacity: showOverlay ? 1 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: const PlayerOverlay(),
-              ),
-            ]),
-          ),
-        );
+              );
+            });
       }),
     );
-  }
-
-  void updateOverlay() {
-    if (!showOverlay) {
-      setState(() {
-        showOverlay = true;
-      });
-    }
-
-    hideOverlayTimer?.cancel();
-
-    if (videoPlayerViewModel.isPaused || playerViewModel.openedPopup != null) {
-      return;
-    }
-
-    hideOverlayTimer = Timer(const Duration(seconds: 1), () {
-      if (showOverlay == false) return;
-      setState(() {
-        showOverlay = false;
-      });
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    pauseOrPlayEventsSubscription = videoPlayerViewModel.pauseOrPlayEvents.listen((event) {
-      updateOverlay();
-    });
+    overlayHider = OverlayHider(playerViewModel, videoPlayerViewModel);
+    overlayHider.start();
   }
 
   @override
   void dispose() {
     super.dispose();
-    hideOverlayTimer?.cancel();
-    pauseOrPlayEventsSubscription.cancel();
+    overlayHider.dispose();
   }
 }
