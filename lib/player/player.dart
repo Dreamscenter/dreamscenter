@@ -69,12 +69,15 @@ class _PlayerState extends State<Player> {
   void initState() {
     super.initState();
     overlayHider = OverlayHider(playerViewModel, videoPlayerViewModel);
-    overlayHider.start();
+    playerViewModel.init();
+    overlayHider.init();
   }
 
   @override
   void dispose() {
     super.dispose();
+    playerViewModel.dispose();
+    videoPlayerViewModel.dispose();
     overlayHider.dispose();
   }
 }

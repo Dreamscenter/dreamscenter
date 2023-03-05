@@ -16,7 +16,7 @@ class OverlayHider extends ChangeNotifier {
 
   OverlayHider(this._playerViewModel, this._videoPlayerViewModel);
 
-  void start() {
+  void init() {
     _pauseOrPlaySubscription = _videoPlayerViewModel.pauseOrPlayEvents.listen((_) => _updateOverlay());
   }
 

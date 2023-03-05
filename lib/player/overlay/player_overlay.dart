@@ -1,5 +1,7 @@
 import 'package:dreamscenter/player/overlay/controls/controls.dart';
+import 'package:dreamscenter/player/overlay/play_pause_button.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_bar.dart';
+import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
@@ -17,6 +19,7 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
   @override
   Widget build(BuildContext context) {
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
+    final playerViewModel = context.watch<PlayerViewModel>();
     return EnhancedOverlay(
       child: Stack(
         children: [
@@ -25,6 +28,10 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
             const Controls(),
             ProgressBar(progress: videoPlayerViewModel.progress, onSeek: videoPlayerViewModel.seek),
           ),
+          if (playerViewModel.showMobileControls)
+            const Center(
+              child: PlayPauseButton(),
+            )
         ],
       ),
     );

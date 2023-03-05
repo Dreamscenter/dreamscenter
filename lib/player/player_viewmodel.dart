@@ -1,5 +1,5 @@
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 class PlayerViewModel extends ChangeNotifier {
   String? _source;
@@ -18,5 +18,23 @@ class PlayerViewModel extends ChangeNotifier {
   set openedPopup(ControlPopup? newValue) {
     _openedPopup = newValue;
     notifyListeners();
+  }
+
+  bool get showMobileControls => FocusManager.instance.highlightMode == FocusHighlightMode.touch;
+
+  bool initialized = false;
+
+  void init() {
+    if (initialized) throw StateError('Already initialized');
+
+    FocusManager.instance.addListener(notifyListeners);
+
+    initialized = true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    FocusManager.instance.removeListener(notifyListeners);
   }
 }
