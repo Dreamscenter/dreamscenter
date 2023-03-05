@@ -14,7 +14,7 @@ class SourceControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Control(
       icon: const FaIcon(FontAwesomeIcons.circlePlay, color: DefaultColors.primaryDark),
-      popup: SourcePopup(),
+      popup: const SourcePopup(),
       showPopup: showPopup,
       onOpenPopup: onOpenPopup,
     );

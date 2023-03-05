@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:flutter/widgets.dart';
 
@@ -27,7 +29,9 @@ class PlayerViewModel extends ChangeNotifier {
   void init() {
     if (initialized) throw StateError('Already initialized');
 
-    FocusManager.instance.addListener(notifyListeners);
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      notifyListeners();
+    });
 
     initialized = true;
   }

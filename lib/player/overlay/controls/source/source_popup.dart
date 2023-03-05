@@ -3,10 +3,15 @@ import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SourcePopup extends StatelessWidget {
-  final textController = TextEditingController();
+class SourcePopup extends StatefulWidget {
+  const SourcePopup({super.key});
 
-  SourcePopup({super.key});
+  @override
+  State<SourcePopup> createState() => _SourcePopupState();
+}
+
+class _SourcePopupState extends State<SourcePopup> {
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
