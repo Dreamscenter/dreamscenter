@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:js/js.dart';
@@ -14,8 +15,16 @@ Future<void> exitFullscreen() async {
   }
 }
 
-Future<bool> isFullscreen() async {
+bool isFullscreen() {
   return document.fullscreenElement != null || Document.webkitFullscreenElement != null;
+}
+
+Stream<void> fullscreenEvents = fullscreenStream();
+
+Stream<void> fullscreenStream() {
+  final controller = StreamController<void>();
+  document.addEventListener('fullscreenchange', (_) => controller.add(null));
+  return controller.stream;
 }
 
 @JS("document")

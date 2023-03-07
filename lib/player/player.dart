@@ -38,7 +38,7 @@ class _PlayerState extends State<Player> {
               InteractionDetector(
                 onTapDown: playerViewModel.onPlayerTap,
                 onDoubleTap: () {
-                  if (isInTouchMode()) {
+                  if (isInDesktopMode()) {
                     switchFullscreen();
                   }
                 },
