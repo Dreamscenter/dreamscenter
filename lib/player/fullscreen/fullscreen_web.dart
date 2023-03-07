@@ -23,7 +23,14 @@ Stream<void> fullscreenEvents = fullscreenStream();
 
 Stream<void> fullscreenStream() {
   final controller = StreamController<void>();
-  document.addEventListener('fullscreenchange', (_) => controller.add(null));
+  document.addEventListener('fullscreenchange', (_) {
+    controller.add(null);
+    if (isFullscreen()) {
+      window.screen?.orientation?.lock('landscape');
+    } else {
+      window.screen?.orientation?.unlock();
+    }
+  });
   return controller.stream;
 }
 
