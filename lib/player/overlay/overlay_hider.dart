@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/foundation.dart';
@@ -27,8 +28,20 @@ class OverlayHider extends ChangeNotifier {
     _hideOverlayTimer?.cancel();
   }
 
+  void onPlayerTap() {
+    if (isInTouchMode()) {
+      if (_showOverlay) {
+        _setShowOverlay(false);
+      } else {
+        _updateOverlay();
+      }
+    }
+  }
+
   void onMouseMovement() {
-    _updateOverlay();
+    if (isInDesktopMode()) {
+      _updateOverlay();
+    }
   }
 
   void _updateOverlay() {
@@ -40,7 +53,7 @@ class OverlayHider extends ChangeNotifier {
       return;
     }
 
-    _hideOverlayTimer = Timer(const Duration(seconds: 1), () {
+    _hideOverlayTimer = Timer(Duration(seconds: isInDesktopMode() ? 1 : 5), () {
       _setShowOverlay(false);
     });
   }

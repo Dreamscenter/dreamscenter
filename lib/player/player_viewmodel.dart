@@ -1,9 +1,14 @@
-import 'dart:async';
-
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
+import 'package:dreamscenter/player/overlay/overlay_hider.dart';
+import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/widgets.dart';
+import 'package:dreamscenter/device_info.dart';
 
 class PlayerViewModel extends ChangeNotifier {
+  final VideoPlayerViewModel _videoPlayerViewModel;
+  
+  PlayerViewModel(this._videoPlayerViewModel);
+
   String? _source;
 
   String? get source => _source;
@@ -22,16 +27,18 @@ class PlayerViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get showMobileControls => FocusManager.instance.highlightMode == FocusHighlightMode.touch;
+  bool get showMobileControls => isInTouchMode();
 
   bool initialized = false;
 
   void init() {
     if (initialized) throw StateError('Already initialized');
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      notifyListeners();
-    });
+    FocusManager.instance.addListener(notifyListeners);
+    
+    _overlayHider = OverlayHider(this, _videoPlayerViewModel);
+    _overlayHider.init();
+    _overlayHider.addListener(notifyListeners);
 
     initialized = true;
   }
@@ -40,5 +47,24 @@ class PlayerViewModel extends ChangeNotifier {
   void dispose() {
     super.dispose();
     FocusManager.instance.removeListener(notifyListeners);
+    _overlayHider.dispose();
   }
+
+  late final OverlayHider _overlayHider;
+  bool get showOverlay => _overlayHider.showOverlay;
+  
+  void onPlayerTap() {
+    _overlayHider.onPlayerTap();
+    
+    if (openedPopup != null) {
+      openedPopup = null;
+      return;
+    }
+    
+    if (isInDesktopMode()) {
+      _videoPlayerViewModel.switchPause(); 
+    }
+  }
+  
+  void onMouseMovement() => _overlayHider.onMouseMovement();
 }
