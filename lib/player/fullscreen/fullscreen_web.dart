@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:js/js.dart';
 
 Future<void> enterFullscreen() async {
-  document.documentElement!.requestFullscreen();
+  document.documentElement!.requestFullscreen({'orientation': 'landscape'});
 }
 
 Future<void> exitFullscreen() async {
