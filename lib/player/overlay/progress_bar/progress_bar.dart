@@ -1,6 +1,7 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
 import 'package:dreamscenter/util.dart';
+import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
 
 class ProgressBar extends StatelessWidget {
@@ -12,17 +13,17 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-              onTapUp: (details) => handleSeek(details, context),
-              child: SizedBox(
-                height: 12,
-                child: Stack(children: [
-                  background(context),
-                  mediaProgress(context, constraints),
-                ]),
-              )));
+      return InteractionDetector(
+          onTapUp: (details) => handleSeek(details, context),
+          showClickCursor: true,
+          extraHitboxSize: 15,
+          child: SizedBox(
+            height: 12,
+            child: Stack(children: [
+              background(context),
+              mediaProgress(context, constraints),
+            ]),
+          ));
     });
   }
 

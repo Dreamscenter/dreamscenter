@@ -47,13 +47,10 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 2),
               child: controls,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              child: progressBar,
-            ),
+            progressBar,
           ],
         ),
       ),

@@ -42,7 +42,11 @@ class _VideoPlayerState extends State<VideoPlayer> {
     video.addEventListener('ratechange', (event) => widget.viewModel.onSpeedChanged(video.playbackRate.toDouble()));
     widget.viewModel.provideController(VideoPlayerController(
       pause: () async => video.pause(),
-      play: () => video.play(),
+      play: () async {
+        if (video.src != '') {
+          video.play();
+        }
+      },
       setPosition: (newPosition) async => video.currentTime = newPosition.inSeconds.toDouble(),
       setVolume: (volume) async => video.volume = volume,
       setSpeed: (speed) async => video.playbackRate = speed,
