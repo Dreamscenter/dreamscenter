@@ -37,7 +37,7 @@ class InteractionDetector extends StatelessWidget {
               onDoubleTap: onDoubleTap,
               onTapUp: onTapUp,
               child: Container(
-                color: Colors.red,
+                color: Colors.transparent,
                 padding: isInTouchMode() ? EdgeInsets.all(extraHitboxSize / 2) : null,
                 margin: isInTouchMode() ? null : EdgeInsets.all(extraHitboxSize / 2),
                 child: showClickCursor ? EnhancedMouseRegion(cursor: SystemMouseCursors.click, child: child) : child,
