@@ -17,17 +17,19 @@ class Controls extends StatelessWidget {
       height: 48,
       child: Row(
         children: [
-          VolumeControl(
-            showPopup: playerViewModel.openedPopup == ControlPopup.volume,
-            onOpenPopup: () {
-              if (playerViewModel.openedPopup != ControlPopup.volume) {
-                playerViewModel.openedPopup = ControlPopup.volume;
-              } else {
-                playerViewModel.openedPopup = null;
-              }
-            },
-          ),
-          const SizedBox(width: buttonSpacing),
+          if (!playerViewModel.showMobileControls) ...[
+            VolumeControl(
+              showPopup: playerViewModel.openedPopup == ControlPopup.volume,
+              onOpenPopup: () {
+                if (playerViewModel.openedPopup != ControlPopup.volume) {
+                  playerViewModel.openedPopup = ControlPopup.volume;
+                } else {
+                  playerViewModel.openedPopup = null;
+                }
+              },
+            ),
+            const SizedBox(width: buttonSpacing)
+          ],
           SourceControl(
             showPopup: playerViewModel.openedPopup == ControlPopup.source,
             onOpenPopup: () {
