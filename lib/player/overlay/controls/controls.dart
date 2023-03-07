@@ -11,10 +11,10 @@ class Controls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const buttonSpacing = 21.0;
+    const buttonSpacing = 0.0;
     final playerViewModel = context.watch<PlayerViewModel>();
     return SizedBox(
-      height: 24,
+      height: 48,
       child: Row(
         children: [
           VolumeControl(

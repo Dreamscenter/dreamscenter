@@ -13,6 +13,7 @@ class PlayPauseButton extends StatelessWidget {
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return InteractionDetector(
       onTap: videoPlayerViewModel.switchPause,
+      extraHitboxSize: 50,
       child: FaIcon(
         videoPlayerViewModel.isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause,
         color: DefaultColors.primaryDark,

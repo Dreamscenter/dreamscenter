@@ -39,6 +39,7 @@ class Control extends StatelessWidget {
     final clickable = InteractionDetector(
       onTap: onOpenPopup,
       showClickCursor: true,
+      extraHitboxSize: 24,
       child: withShadow,
     );
 

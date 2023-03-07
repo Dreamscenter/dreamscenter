@@ -11,6 +11,7 @@ class FullscreenButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InteractionDetector(
       onTap: switchFullscreen,
+      extraHitboxSize: 24,
       child: StreamBuilder(
         stream: fullscreenEvents,
         builder: (_, __) {
