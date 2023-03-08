@@ -41,18 +41,20 @@ class _VideoPlayerState extends State<VideoPlayer> {
     video.addEventListener('volumechange', (event) => widget.viewModel.onVolumeChanged(video.volume.toDouble()));
     video.addEventListener('ratechange', (event) => widget.viewModel.onSpeedChanged(video.playbackRate.toDouble()));
     widget.viewModel.provideController(VideoPlayerController(
-      pause: () async => video.pause(),
-      play: () async {
-        if (video.src != '') {
-          video.play();
-        }
-      },
-      setPosition: (newPosition) async => video.currentTime = newPosition.inSeconds.toDouble(),
+      pause: () async => ifPlaying(video.pause),
+      play: () async => ifPlaying(video.play),
+      setPosition: (newPosition) async => ifPlaying(() => video.currentTime = newPosition.inSeconds.toDouble()),
       setVolume: (volume) async => video.volume = volume,
       setSpeed: (speed) async => video.playbackRate = speed,
     ));
 
     ui.platformViewRegistry.registerViewFactory('videoPlayer', (int viewId) => video);
+  }
+
+  void ifPlaying(Function() function) {
+    if (widget.source != null) {
+      function();
+    }
   }
 
   @override
