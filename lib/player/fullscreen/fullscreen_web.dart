@@ -22,7 +22,7 @@ bool isFullscreen() {
 Stream<void> fullscreenEvents = fullscreenStream();
 
 Stream<void> fullscreenStream() {
-  final controller = StreamController<void>();
+  final controller = StreamController<void>.broadcast();
   document.addEventListener('fullscreenchange', (_) {
     controller.add(null);
     if (isFullscreen()) {
