@@ -1,19 +1,16 @@
 import 'package:dreamscenter/widgets/interaction_detector.dart';
-import 'package:dreamscenter/widgets/popup/popup.dart';
 import 'package:flutter/material.dart';
 
 class Control extends StatelessWidget {
   final Widget icon;
-  final Widget popup;
-  final bool showPopup;
-  final void Function() onOpenPopup;
+  final void Function() onTap;
+  final double extraHitboxSize;
 
   const Control({
     super.key,
     required this.icon,
-    required this.popup,
-    required this.showPopup,
-    required this.onOpenPopup,
+    required this.onTap,
+    required this.extraHitboxSize,
   });
 
   @override
@@ -37,21 +34,15 @@ class Control extends StatelessWidget {
     );
 
     final clickable = InteractionDetector(
-      onTap: onOpenPopup,
+      onTap: onTap,
       showClickCursor: true,
-      extraHitboxSize: 24,
+      extraHitboxSize: extraHitboxSize,
       child: withShadow,
-    );
-
-    final withPopup = Popup(
-      popup: popup,
-      opened: showPopup,
-      child: clickable,
     );
 
     return AspectRatio(
       aspectRatio: 1,
-      child: withPopup,
+      child: clickable,
     );
   }
 }

@@ -1,10 +1,9 @@
-import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
+import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/overlay/controls/source/source_control.dart';
 import 'package:dreamscenter/player/overlay/controls/volume/volume_control.dart';
-import 'package:dreamscenter/player/overlay/fullscreen_button.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
+import 'package:dreamscenter/player/overlay/controls/fullscreen_button.dart';
+import 'package:dreamscenter/player/overlay/controls/play_pause_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Controls extends StatelessWidget {
   const Controls({super.key});
@@ -12,36 +11,19 @@ class Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const buttonSpacing = 0.0;
-    final playerViewModel = context.watch<PlayerViewModel>();
     return SizedBox(
       height: 48,
       child: Row(
         children: [
-          if (!playerViewModel.showMobileControls) ...[
-            VolumeControl(
-              showPopup: playerViewModel.openedPopup == ControlPopup.volume,
-              onOpenPopup: () {
-                if (playerViewModel.openedPopup != ControlPopup.volume) {
-                  playerViewModel.openedPopup = ControlPopup.volume;
-                } else {
-                  playerViewModel.openedPopup = null;
-                }
-              },
-            ),
+          if (isInDesktopMode()) ...[
+            const PlayPauseButton(extraHitboxSize: 24),
+            const SizedBox(width: buttonSpacing),
+            const VolumeControl(),
             const SizedBox(width: buttonSpacing)
           ],
-          SourceControl(
-            showPopup: playerViewModel.openedPopup == ControlPopup.source,
-            onOpenPopup: () {
-              if (playerViewModel.openedPopup != ControlPopup.source) {
-                playerViewModel.openedPopup = ControlPopup.source;
-              } else {
-                playerViewModel.openedPopup = null;
-              }
-            },
-          ),
+          const SourceControl(),
           const Spacer(),
-          if (playerViewModel.showMobileControls) const FullscreenButton()
+          const FullscreenButton()
         ],
       ),
     );

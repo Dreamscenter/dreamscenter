@@ -1,6 +1,6 @@
 import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/overlay/controls/controls.dart';
-import 'package:dreamscenter/player/overlay/play_pause_button.dart';
+import 'package:dreamscenter/player/overlay/controls/play_pause_button.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_bar.dart';
 import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
@@ -26,7 +26,11 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
           ),
           if (isInTouchMode())
             const Center(
-              child: PlayPauseButton(),
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: PlayPauseButton(extraHitboxSize: 50),
+              ),
             )
         ],
       ),
