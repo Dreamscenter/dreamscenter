@@ -19,7 +19,7 @@ class _ProgressBarState extends State<ProgressBar> {
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return LayoutBuilder(builder: (context, constraints) {
       return InteractionDetector(
-          onTapDown: (event) => handleSeeking(event, context, videoPlayerViewModel),
+          onTapDown: (event) => handleSeekingStart(event, context, videoPlayerViewModel),
           onDrag: (event) => handleSeeking(event, context, videoPlayerViewModel),
           onTapUp: (event) => handleSeekStop(videoPlayerViewModel),
           showClickCursor: true,
@@ -65,14 +65,23 @@ class _ProgressBarState extends State<ProgressBar> {
     );
   }
 
-  void handleSeeking(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
+  bool wasPaused = false;
+
+  void handleSeekingStart(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
+    wasPaused = videoPlayerViewModel.isPaused;
     videoPlayerViewModel.pause();
+    handleSeeking(event, context, videoPlayerViewModel);
+  }
+
+  void handleSeeking(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
     final width = context.size!.width;
     final progress = event.localPosition.dx / width;
     videoPlayerViewModel.seek(progress);
   }
 
   void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel) {
-    videoPlayerViewModel.play();
+    if (!wasPaused) {
+      videoPlayerViewModel.play();
+    }
   }
 }
