@@ -65,9 +65,11 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: const IgnorePointer(child: HtmlElementView(viewType: 'videoPlayer')),
+    return IgnorePointer(
+      child: Container(
+        color: Colors.black,
+        child: const HtmlElementView(viewType: 'videoPlayer'),
+      ),
     );
   }
 }

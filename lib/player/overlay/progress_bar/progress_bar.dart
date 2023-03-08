@@ -1,42 +1,40 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
+import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-class ProgressBar extends StatelessWidget {
-  final double progress;
-  final void Function(double) onSeek;
-
-  const ProgressBar({super.key, required this.progress, required this.onSeek}) : assert(progress >= 0 && progress <= 1);
+class ProgressBar extends StatefulWidget {
+  const ProgressBar({super.key});
 
   @override
+  State<ProgressBar> createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar> {
+  @override
   Widget build(BuildContext context) {
+    final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return LayoutBuilder(builder: (context, constraints) {
       return InteractionDetector(
-          onTapUp: (details) => handleSeek(details, context),
+          onTapDown: (event) => handleSeeking(event, context, videoPlayerViewModel),
+          onDrag: (event) => handleSeeking(event, context, videoPlayerViewModel),
+          onTapUp: (event) => handleSeekStop(videoPlayerViewModel),
           showClickCursor: true,
           extraHitboxSize: 15,
           child: SizedBox(
             height: 12,
             child: Stack(children: [
               background(context),
-              mediaProgress(context, constraints),
+              mediaProgress(context, constraints, videoPlayerViewModel.progress),
             ]),
           ));
     });
   }
 
-  background(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF333333),
-        borderRadius: BorderRadius.circular(longestSize(context)),
-      ),
-    );
-  }
-
-  mediaProgress(BuildContext context, BoxConstraints constraints) {
+  Widget mediaProgress(BuildContext context, BoxConstraints constraints, double progress) {
     return Stack(children: [
       Container(
         width: constraints.maxWidth * progress,
@@ -58,11 +56,23 @@ class ProgressBar extends StatelessWidget {
     ]);
   }
 
-  handleSeek(TapUpDetails details, BuildContext progressBar) {
-    final width = progressBar.size?.width;
-    if (width != null) {
-      final progress = details.localPosition.dx / width;
-      onSeek(progress);
-    }
+  Widget background(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF333333),
+        borderRadius: BorderRadius.circular(longestSize(context)),
+      ),
+    );
+  }
+
+  void handleSeeking(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
+    videoPlayerViewModel.pause();
+    final width = context.size!.width;
+    final progress = event.localPosition.dx / width;
+    videoPlayerViewModel.seek(progress);
+  }
+
+  void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel) {
+    videoPlayerViewModel.play();
   }
 }

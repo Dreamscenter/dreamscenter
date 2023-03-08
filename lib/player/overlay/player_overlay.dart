@@ -1,12 +1,10 @@
+import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/overlay/controls/controls.dart';
 import 'package:dreamscenter/player/overlay/play_pause_button.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_bar.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
-import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/widgets/enhanced_overlay.dart';
 import 'package:dreamscenter/widgets/fractionally_sized_container.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlayerOverlay extends StatefulWidget {
   const PlayerOverlay({super.key});
@@ -18,17 +16,15 @@ class PlayerOverlay extends StatefulWidget {
 class _PlayerOverlayState extends State<PlayerOverlay> {
   @override
   Widget build(BuildContext context) {
-    final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
-    final playerViewModel = context.watch<PlayerViewModel>();
     return EnhancedOverlay(
       child: Stack(
         children: [
           shadow,
           controlsAndProgressBar(
             const Controls(),
-            ProgressBar(progress: videoPlayerViewModel.progress, onSeek: videoPlayerViewModel.seek),
+            const ProgressBar(),
           ),
-          if (playerViewModel.showMobileControls)
+          if (isInTouchMode())
             const Center(
               child: PlayPauseButton(),
             )

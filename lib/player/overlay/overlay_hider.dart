@@ -28,7 +28,7 @@ class OverlayHider extends ChangeNotifier {
     _hideOverlayTimer?.cancel();
   }
 
-  void onPlayerTap() {
+  void onPlayerTapDown() {
     if (isInTouchMode()) {
       if (_showOverlay) {
         _setShowOverlay(false);

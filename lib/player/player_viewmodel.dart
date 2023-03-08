@@ -6,7 +6,7 @@ import 'package:dreamscenter/device_info.dart';
 
 class PlayerViewModel extends ChangeNotifier {
   final VideoPlayerViewModel _videoPlayerViewModel;
-  
+
   PlayerViewModel(this._videoPlayerViewModel);
 
   String? _source;
@@ -35,7 +35,7 @@ class PlayerViewModel extends ChangeNotifier {
     if (initialized) throw StateError('Already initialized');
 
     FocusManager.instance.addListener(notifyListeners);
-    
+
     _overlayHider = OverlayHider(this, _videoPlayerViewModel);
     _overlayHider.init();
     _overlayHider.addListener(notifyListeners);
@@ -51,20 +51,31 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   late final OverlayHider _overlayHider;
+
   bool get showOverlay => _overlayHider.showOverlay;
-  
+
+  bool _tapConsumed = false;
+
   void onPlayerTap() {
-    _overlayHider.onPlayerTap();
-    
-    if (openedPopup != null) {
-      openedPopup = null;
+    if (_tapConsumed) {
+      _tapConsumed = false;
       return;
     }
     
     if (isInDesktopMode()) {
-      _videoPlayerViewModel.switchPause(); 
+      _videoPlayerViewModel.switchPause();
     }
   }
-  
+
+  void onPlayerTapDown() {
+    _overlayHider.onPlayerTapDown();
+
+    if (openedPopup != null) {
+      openedPopup = null;
+      _tapConsumed =true;
+      return;
+    }
+  }
+
   void onMouseMovement() => _overlayHider.onMouseMovement();
 }

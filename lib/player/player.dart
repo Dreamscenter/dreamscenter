@@ -1,7 +1,6 @@
 import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
 import 'package:dreamscenter/player/overlay/player_overlay.dart';
-import 'package:dreamscenter/player/overlay/overlay_hider.dart';
 import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
@@ -31,12 +30,13 @@ class _PlayerState extends State<Player> {
       ],
       child: Consumer<PlayerViewModel>(builder: (_, __, ___) {
         return InteractionDetector(
-          onHover: playerViewModel.onMouseMovement,
+          onHover: (_) => playerViewModel.onMouseMovement(),
           child: EnhancedMouseRegion(
             cursor: playerViewModel.showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
             child: Stack(children: [
               InteractionDetector(
-                onTapDown: playerViewModel.onPlayerTap,
+                onTap: playerViewModel.onPlayerTap,
+                onTapDown: (_) => playerViewModel.onPlayerTapDown(),
                 onDoubleTap: () {
                   if (isInDesktopMode()) {
                     switchFullscreen();
