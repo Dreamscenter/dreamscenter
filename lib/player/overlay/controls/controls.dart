@@ -16,7 +16,7 @@ class Controls extends StatelessWidget {
       child: Row(
         children: [
           if (isInDesktopMode()) ...[
-            const PlayPauseButton(extraHitboxSize: 24),
+            const PlayPauseButton(extraHitboxSize: 24, dropShadow: true),
             const SizedBox(width: buttonSpacing),
             const VolumeControl(),
             const SizedBox(width: buttonSpacing)

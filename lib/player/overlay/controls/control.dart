@@ -5,12 +5,14 @@ class Control extends StatelessWidget {
   final Widget icon;
   final void Function() onTap;
   final double extraHitboxSize;
+  final bool dropShadow;
 
   const Control({
     super.key,
     required this.icon,
     required this.onTap,
     required this.extraHitboxSize,
+    this.dropShadow = true,
   });
 
   @override
@@ -23,11 +25,12 @@ class Control extends StatelessWidget {
     final withShadow = Container(
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 4,
-            offset: const Offset(0, 4),
-          ),
+          if (dropShadow)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              blurRadius: 4,
+              offset: const Offset(0, 4),
+            ),
         ],
       ),
       child: fitted,

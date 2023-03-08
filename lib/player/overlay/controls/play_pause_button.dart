@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class PlayPauseButton extends StatelessWidget {
   final double extraHitboxSize;
+  final bool dropShadow;
 
-  const PlayPauseButton({super.key, required this.extraHitboxSize});
+  const PlayPauseButton({super.key, required this.extraHitboxSize, required this.dropShadow});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class PlayPauseButton extends StatelessWidget {
       ),
       onTap: videoPlayerViewModel.switchPause,
       extraHitboxSize: extraHitboxSize,
+      dropShadow: dropShadow,
     );
   }
 }

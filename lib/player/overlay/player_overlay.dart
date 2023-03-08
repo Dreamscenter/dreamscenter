@@ -29,7 +29,7 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
               child: SizedBox(
                 width: 100,
                 height: 100,
-                child: PlayPauseButton(extraHitboxSize: 50),
+                child: PlayPauseButton(extraHitboxSize: 50, dropShadow: false),
               ),
             )
         ],
