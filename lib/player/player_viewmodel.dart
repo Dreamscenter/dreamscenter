@@ -68,13 +68,13 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   void onPlayerTapDown() {
-    _overlayHider.onPlayerTapDown();
-
     if (openedPopup != null) {
       openedPopup = null;
       _tapConsumed =true;
       return;
     }
+    
+    _overlayHider.onPlayerTapDown();
   }
 
   void onMouseMovement() => _overlayHider.onMouseMovement();
