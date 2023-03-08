@@ -78,4 +78,6 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   void onMouseMovement() => _overlayHider.onMouseMovement();
+  
+  bool pausedBySystem = false;
 }

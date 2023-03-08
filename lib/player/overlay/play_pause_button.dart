@@ -1,4 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
+import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,15 @@ class PlayPauseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerViewModel = context.read<PlayerViewModel>();
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return InteractionDetector(
       onTap: videoPlayerViewModel.switchPause,
       extraHitboxSize: 50,
       child: FaIcon(
-        videoPlayerViewModel.isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause,
+        videoPlayerViewModel.isPaused && !playerViewModel.pausedBySystem
+            ? FontAwesomeIcons.play
+            : FontAwesomeIcons.pause,
         color: DefaultColors.primaryDark,
         size: 50,
       ),

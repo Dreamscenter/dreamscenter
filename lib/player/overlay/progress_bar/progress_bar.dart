@@ -1,5 +1,6 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
+import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
@@ -16,12 +17,13 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(BuildContext context) {
+    final playerViewModel = context.read<PlayerViewModel>();
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
     return LayoutBuilder(builder: (context, constraints) {
       return InteractionDetector(
-          onTapDown: (event) => handleSeekingStart(event, context, videoPlayerViewModel),
+          onTapDown: (event) => handleSeekingStart(event, context, videoPlayerViewModel, playerViewModel),
           onDrag: (event) => handleSeeking(event, context, videoPlayerViewModel),
-          onTapUp: (event) => handleSeekStop(videoPlayerViewModel),
+          onTapUp: (event) => handleSeekStop(videoPlayerViewModel, playerViewModel),
           showClickCursor: true,
           extraHitboxSize: 15,
           child: SizedBox(
@@ -67,8 +69,14 @@ class _ProgressBarState extends State<ProgressBar> {
 
   bool wasPaused = false;
 
-  void handleSeekingStart(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
+  void handleSeekingStart(
+    PointerEvent event,
+    BuildContext context,
+    VideoPlayerViewModel videoPlayerViewModel,
+    PlayerViewModel playerViewModel,
+  ) {
     wasPaused = videoPlayerViewModel.isPaused;
+    playerViewModel.pausedBySystem = true;
     videoPlayerViewModel.pause();
     handleSeeking(event, context, videoPlayerViewModel);
   }
@@ -79,8 +87,9 @@ class _ProgressBarState extends State<ProgressBar> {
     videoPlayerViewModel.seek(progress);
   }
 
-  void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel) {
+  void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel, PlayerViewModel playerViewModel) {
     if (!wasPaused) {
+      playerViewModel.pausedBySystem = false;
       videoPlayerViewModel.play();
     }
   }
