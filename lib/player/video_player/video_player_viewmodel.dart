@@ -87,8 +87,8 @@ class VideoPlayerViewModel extends ChangeNotifier {
     await setPosition(newPosition);
   }
 
-  final StreamController<void> _pauseEventsController = StreamController();
-  final StreamController<void> _playEventsController = StreamController();
+  final StreamController<void> _pauseEventsController = StreamController.broadcast();
+  final StreamController<void> _playEventsController = StreamController.broadcast();
 
   Stream<void> get pauseEvents => _pauseEventsController.stream;
 

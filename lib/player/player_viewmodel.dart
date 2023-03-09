@@ -1,5 +1,6 @@
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/overlay/overlay_hider.dart';
+import 'package:dreamscenter/player/play_pause_resolver.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dreamscenter/device_info.dart';
@@ -41,6 +42,8 @@ class PlayerViewModel extends ChangeNotifier {
     _overlayHider.addListener(notifyListeners);
 
     initialized = true;
+
+    _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
   }
 
   @override
@@ -48,6 +51,7 @@ class PlayerViewModel extends ChangeNotifier {
     super.dispose();
     FocusManager.instance.removeListener(notifyListeners);
     _overlayHider.dispose();
+    _playPauseResolver.dispose();
   }
 
   late final OverlayHider _overlayHider;
@@ -61,7 +65,7 @@ class PlayerViewModel extends ChangeNotifier {
       _tapConsumed = false;
       return;
     }
-    
+
     if (isInDesktopMode()) {
       _videoPlayerViewModel.switchPause();
     }
@@ -70,14 +74,18 @@ class PlayerViewModel extends ChangeNotifier {
   void onPlayerTapDown() {
     if (openedPopup != null) {
       openedPopup = null;
-      _tapConsumed =true;
+      _tapConsumed = true;
       return;
     }
-    
+
     _overlayHider.onPlayerTapDown();
   }
 
   void onMouseMovement() => _overlayHider.onMouseMovement();
+
+  final _playPauseResolver = PlayPauseResolver();
+
+  bool get isPaused => _playPauseResolver.isPaused;
   
-  bool pausedBySystem = false;
+  void skipNextPlayPause() => _playPauseResolver.skipNextPlayPause();
 }

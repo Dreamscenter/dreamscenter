@@ -14,15 +14,12 @@ class PlayPauseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerViewModel = context.read<PlayerViewModel>();
-    final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
-    
+    final playerViewModel = context.watch<PlayerViewModel>();
+    final videoPlayerViewModel = context.read<VideoPlayerViewModel>();
+
     return Control(
       icon: FaIcon(
-        videoPlayerViewModel.isPaused && playerViewModel.pausedBySystem ||
-                !videoPlayerViewModel.isPaused && !playerViewModel.pausedBySystem
-            ? FontAwesomeIcons.pause
-            : FontAwesomeIcons.play,
+        playerViewModel.isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause,
         color: DefaultColors.primaryDark,
       ),
       onTap: videoPlayerViewModel.switchPause,

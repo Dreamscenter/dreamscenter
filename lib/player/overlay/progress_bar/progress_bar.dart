@@ -76,7 +76,7 @@ class _ProgressBarState extends State<ProgressBar> {
     PlayerViewModel playerViewModel,
   ) {
     wasPaused = videoPlayerViewModel.isPaused;
-    playerViewModel.pausedBySystem = true;
+    playerViewModel.skipNextPlayPause();
     videoPlayerViewModel.pause();
     handleSeeking(event, context, videoPlayerViewModel);
   }
@@ -88,8 +88,8 @@ class _ProgressBarState extends State<ProgressBar> {
   }
 
   void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel, PlayerViewModel playerViewModel) {
-    playerViewModel.pausedBySystem = false;
     if (!wasPaused) {
+      playerViewModel.skipNextPlayPause();
       videoPlayerViewModel.play();
     }
   }
