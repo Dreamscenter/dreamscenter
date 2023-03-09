@@ -26,7 +26,8 @@ Stream<void> fullscreenStream() {
   document.addEventListener('fullscreenchange', (_) {
     controller.add(null);
     if (isFullscreen()) {
-      window.screen?.orientation?.lock('landscape');
+        window.screen?.orientation?.lock('landscape')
+            .catchError((_) {}, test: (e) => e is DomException && e.name == 'NotSupportedError');
     } else {
       window.screen?.orientation?.unlock();
     }
