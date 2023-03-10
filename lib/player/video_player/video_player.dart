@@ -32,7 +32,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
       ..style.border = 'none'
       ..style.height = '100%'
       ..style.width = '100%'
-      ..autoplay = true;
+      ..autoplay = true
+      ..style.pointerEvents = 'none';
 
     video.addEventListener('pause', (event) => widget.viewModel.onPaused());
     video.addEventListener('play', (event) => widget.viewModel.onPlayed());
