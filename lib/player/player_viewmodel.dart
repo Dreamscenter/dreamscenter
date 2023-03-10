@@ -2,6 +2,7 @@ import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/overlay/overlay_hider.dart';
 import 'package:dreamscenter/player/play_pause_resolver.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
+import 'package:dreamscenter/player/watch_together.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dreamscenter/device_info.dart';
 
@@ -43,7 +44,12 @@ class PlayerViewModel extends ChangeNotifier {
 
     initialized = true;
 
+    watchTogether = WatchTogether(_videoPlayerViewModel);
+
     _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
+    _videoPlayerViewModel.pauseOrPlayEvents.listen((event) {
+      watchTogether.pauseAt(_videoPlayerViewModel.playback!.position);
+    });
   }
 
   @override
@@ -86,6 +92,8 @@ class PlayerViewModel extends ChangeNotifier {
   final _playPauseResolver = PlayPauseResolver();
 
   bool get isPaused => _playPauseResolver.isPaused;
-  
+
   void skipNextPlayPause() => _playPauseResolver.skipNextPlayPause();
+
+  late final watchTogether;
 }
