@@ -50,11 +50,6 @@ class PlayerViewModel extends ChangeNotifier {
 
     _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
     _videoPlayerViewModel.pauseOrPlayEvents.listen((_) {
-      if (skipNext) {
-        skipNext = false;
-        return;
-      }
-      skipNext = true;
       if (_videoPlayerViewModel.isPaused) {
         watchTogether.pauseAt(_videoPlayerViewModel.playback!.position);
       } else {
