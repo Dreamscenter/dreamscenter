@@ -23,7 +23,7 @@ class _ProgressBarState extends State<ProgressBar> {
       return InteractionDetector(
           onTapDown: (event) => handleSeekingStart(event, context, videoPlayerViewModel, playerViewModel),
           onDrag: (event) => handleSeeking(event, context, videoPlayerViewModel),
-          onTapUp: (event) => handleSeekStop(videoPlayerViewModel, playerViewModel),
+          onTapUp: (_) => handleSeekStop(videoPlayerViewModel, playerViewModel),
           showClickCursor: true,
           extraHitboxSize: 15,
           child: SizedBox(

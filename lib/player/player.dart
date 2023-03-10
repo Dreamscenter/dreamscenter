@@ -31,6 +31,7 @@ class _PlayerState extends State<Player> {
       child: Consumer<PlayerViewModel>(builder: (_, __, ___) {
         return InteractionDetector(
           onHover: (_) => playerViewModel.onMouseMovement(),
+          onDrag: (_) => playerViewModel.onMouseMovement(),
           child: EnhancedMouseRegion(
             cursor: playerViewModel.showOverlay ? SystemMouseCursors.basic : SystemMouseCursors.none,
             child: Stack(children: [

@@ -28,7 +28,3 @@ class PlayPauseButton extends StatelessWidget {
     );
   }
 }
-
-// isPaused && !pausedBySystem -> play
-// isPaused && pausedBySystem -> pause
-// !isPaused && !pausedBySystem -> pause
