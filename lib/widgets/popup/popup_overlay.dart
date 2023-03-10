@@ -38,7 +38,7 @@ class PopupOverlayLayoutDelegate extends SingleChildLayoutDelegate {
   Offset getPositionForChild(Size size, Size childSize) {
     final anchorTopCenter = anchor.localToGlobal(Offset(anchor.size.width / 2, 0), ancestor: popupArea);
     final centeredPosition = anchorTopCenter - Offset(childSize.width / 2, 0);
-    final upliftedPosition = centeredPosition - Offset(0, childSize.height + 20);
+    final upliftedPosition = centeredPosition - Offset(0, childSize.height + 10);
     final clampedPosition = Offset(upliftedPosition.dx.clamp(margin, size.width - childSize.width - margin),
         upliftedPosition.dy.clamp(margin, size.height - childSize.height - margin));
 
