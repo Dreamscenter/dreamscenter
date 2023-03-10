@@ -8,7 +8,6 @@ class WatchTogether {
   late final WebSocketChannel channel;
   VideoPlayerViewModel videoPlayerViewModel;
 
-
   WatchTogether(this.videoPlayerViewModel);
 
   void connect() {
@@ -35,14 +34,18 @@ class WatchTogether {
   }
 
   void pauseAt(Duration position) {
+    if (!isConnected) return;
+
     channel.sink.add(
       ByteData(10)
         ..setInt16(0, 0)
         ..setFloat64(2, position.inMilliseconds / 1000.0),
     );
   }
-  
+
   void playAt(Duration position) {
+    if (!isConnected) return;
+
     channel.sink.add(
       ByteData(10)
         ..setInt16(0, 1)
