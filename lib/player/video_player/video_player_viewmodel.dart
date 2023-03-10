@@ -83,7 +83,9 @@ class VideoPlayerViewModel extends ChangeNotifier {
 
   Future<void> seek(double progressPercentage) async {
     if (playback == null) return;
-    final newPosition = playback!.duration * progressPercentage;
+    
+    final clampedProgress = clampDouble(progressPercentage, 0, 1);
+    final newPosition = playback!.duration * clampedProgress;
     await setPosition(newPosition);
   }
 

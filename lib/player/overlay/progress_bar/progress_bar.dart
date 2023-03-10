@@ -15,25 +15,29 @@ class ProgressBar extends StatefulWidget {
 }
 
 class _ProgressBarState extends State<ProgressBar> {
+  late BuildContext progressBarContext;
+  final double extraHitboxSize = 15;
+  
   @override
   Widget build(BuildContext context) {
     final playerViewModel = context.read<PlayerViewModel>();
     final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
-    return LayoutBuilder(builder: (context, constraints) {
-      return InteractionDetector(
-          onTapDown: (event) => handleSeekingStart(event, context, videoPlayerViewModel, playerViewModel),
-          onDrag: (event) => handleSeeking(event, context, videoPlayerViewModel),
-          onTapUp: (_) => handleSeekStop(videoPlayerViewModel, playerViewModel),
-          showClickCursor: true,
-          extraHitboxSize: 15,
-          child: SizedBox(
+    return InteractionDetector(
+        onTapDown: (event) => handleSeekingStart(event, videoPlayerViewModel, playerViewModel),
+        onDrag: (event) => handleSeeking(event, videoPlayerViewModel),
+        onTapUp: (_) => handleSeekStop(videoPlayerViewModel, playerViewModel),
+        showClickCursor: true,
+        extraHitboxSize: extraHitboxSize,
+        child: LayoutBuilder(builder: (context, constraints) {
+          progressBarContext = context;
+          return SizedBox(
             height: 12,
             child: Stack(children: [
               background(context),
               mediaProgress(context, constraints, videoPlayerViewModel.progress),
             ]),
-          ));
-    });
+          );
+        }));
   }
 
   Widget mediaProgress(BuildContext context, BoxConstraints constraints, double progress) {
@@ -71,7 +75,6 @@ class _ProgressBarState extends State<ProgressBar> {
 
   void handleSeekingStart(
     PointerEvent event,
-    BuildContext context,
     VideoPlayerViewModel videoPlayerViewModel,
     PlayerViewModel playerViewModel,
   ) {
@@ -80,12 +83,12 @@ class _ProgressBarState extends State<ProgressBar> {
       playerViewModel.skipNextPlayPause();
       videoPlayerViewModel.pause();
     }
-    handleSeeking(event, context, videoPlayerViewModel);
+    handleSeeking(event, videoPlayerViewModel);
   }
 
-  void handleSeeking(PointerEvent event, BuildContext context, VideoPlayerViewModel videoPlayerViewModel) {
-    final width = context.size!.width;
-    final progress = event.localPosition.dx / width;
+  void handleSeeking(PointerEvent event, VideoPlayerViewModel videoPlayerViewModel) {
+    final width = progressBarContext.size!.width;
+    final progress = (event.localPosition.dx - extraHitboxSize / 2) / width;
     videoPlayerViewModel.seek(progress);
   }
 
