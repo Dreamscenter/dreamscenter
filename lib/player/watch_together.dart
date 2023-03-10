@@ -28,6 +28,9 @@ class WatchTogether {
     if (packet is PauseAtPacket) {
       videoPlayerViewModel.pause();
       videoPlayerViewModel.setPosition(packet.position);
+    } else if (packet is PlayAtPacket) {
+      videoPlayerViewModel.play();
+      videoPlayerViewModel.setPosition(packet.position);
     }
   }
 
@@ -35,6 +38,14 @@ class WatchTogether {
     channel.sink.add(
       ByteData(10)
         ..setInt16(0, 0)
+        ..setFloat64(2, position.inMilliseconds / 1000.0),
+    );
+  }
+  
+  void playAt(Duration position) {
+    channel.sink.add(
+      ByteData(10)
+        ..setInt16(0, 1)
         ..setFloat64(2, position.inMilliseconds / 1000.0),
     );
   }
@@ -48,6 +59,12 @@ class PauseAtPacket extends WatchTogetherPacket {
   PauseAtPacket(this.position);
 }
 
+class PlayAtPacket extends WatchTogetherPacket {
+  final Duration position;
+
+  PlayAtPacket(this.position);
+}
+
 WatchTogetherPacket parsePacket(Uint8List packet) {
   final view = ByteData.view(packet.buffer);
   final type = view.getInt16(0);
@@ -55,6 +72,8 @@ WatchTogetherPacket parsePacket(Uint8List packet) {
   switch (type) {
     case 0:
       return PauseAtPacket(view.getFloat64(2).seconds);
+    case 1:
+      return PlayAtPacket(view.getFloat64(2).seconds);
     default:
       throw Exception('Unknown packet type: $type');
   }

@@ -33,6 +33,8 @@ class PlayerViewModel extends ChangeNotifier {
 
   bool initialized = false;
 
+  bool skipNext = false;
+  
   void init() {
     if (initialized) throw StateError('Already initialized');
 
@@ -47,8 +49,17 @@ class PlayerViewModel extends ChangeNotifier {
     watchTogether = WatchTogether(_videoPlayerViewModel);
 
     _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
-    _videoPlayerViewModel.pauseOrPlayEvents.listen((event) {
-      watchTogether.pauseAt(_videoPlayerViewModel.playback!.position);
+    _videoPlayerViewModel.pauseOrPlayEvents.listen((_) {
+      if (skipNext) {
+        skipNext = false;
+        return;
+      }
+      skipNext = true;
+      if (_videoPlayerViewModel.isPaused) {
+        watchTogether.pauseAt(_videoPlayerViewModel.playback!.position);
+      } else {
+        watchTogether.playAt(_videoPlayerViewModel.playback!.position);
+      }
     });
   }
 
@@ -95,5 +106,5 @@ class PlayerViewModel extends ChangeNotifier {
 
   void skipNextPlayPause() => _playPauseResolver.skipNextPlayPause();
 
-  late final watchTogether;
+  late final WatchTogether watchTogether;
 }
