@@ -1,46 +1,27 @@
-import 'dart:async';
-
-import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
+import 'package:dreamscenter/player/player_view_model.dart';
 
 class PlayPauseResolver {
-  bool _isPaused = true;
+  PlayerViewModel viewModel;
   bool _skipNext = false;
-  late StreamSubscription<void> playOrPauseSubscription;
-  late void Function() _notifyListeners;
   
-  bool get isPaused => _isPaused;
-  
-  void init(VideoPlayerViewModel videoPlayerViewModel, void Function() notifyListeners) {
-    _notifyListeners = notifyListeners;
-    playOrPauseSubscription = videoPlayerViewModel.pauseOrPlayEvents.listen((_) { 
-      if (videoPlayerViewModel.isPaused) {
-        _onPause();
-      } else {
-        _onPlay();
-      }
-    });
-  }
-  
-  void dispose() {
-    playOrPauseSubscription.cancel();
-  }
-  
-  void _onPause() {
+  PlayPauseResolver(this.viewModel);
+
+  void onPause() {
     if (_skipNext) {
       _skipNext = false;
       return;
     }
-    _isPaused = true;
-    _notifyListeners();
+    viewModel.isPaused = true;
+    viewModel.pauseEventsController.add(null);
   }
   
-  void _onPlay() {
+  void onPlay() {
     if (_skipNext) {
       _skipNext = false;
       return;
     }
-    _isPaused = false;
-    _notifyListeners();
+    viewModel.isPaused = false;
+    viewModel.playEventsController.add(null);
   }
   
   void skipNextPlayPause() {

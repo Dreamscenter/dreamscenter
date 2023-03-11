@@ -1,7 +1,8 @@
+import 'dart:ui';
+
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
-import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
+import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
@@ -17,15 +18,14 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   late BuildContext progressBarContext;
   final double extraHitboxSize = 15;
-  
+
   @override
   Widget build(BuildContext context) {
-    final playerViewModel = context.read<PlayerViewModel>();
-    final videoPlayerViewModel = context.watch<VideoPlayerViewModel>();
+    final viewModel = context.watch<PlayerViewModel>();
     return InteractionDetector(
-        onTapDown: (event) => handleSeekingStart(event, videoPlayerViewModel, playerViewModel),
-        onDrag: (event) => handleSeeking(event, videoPlayerViewModel),
-        onTapUp: (_) => handleSeekStop(videoPlayerViewModel, playerViewModel),
+        onTapDown: (event) => handleSeekingStart(event, viewModel),
+        onDrag: (event) => handleSeeking(event, viewModel),
+        onTapUp: (_) => handleSeekStop(viewModel),
         showClickCursor: true,
         extraHitboxSize: extraHitboxSize,
         child: LayoutBuilder(builder: (context, constraints) {
@@ -34,13 +34,17 @@ class _ProgressBarState extends State<ProgressBar> {
             height: 12,
             child: Stack(children: [
               background(context),
-              mediaProgress(context, constraints, videoPlayerViewModel.progress),
+              mediaProgress(context, constraints, viewModel),
             ]),
           );
         }));
   }
 
-  Widget mediaProgress(BuildContext context, BoxConstraints constraints, double progress) {
+  Widget mediaProgress(BuildContext context, BoxConstraints constraints, PlayerViewModel viewModel) {
+    final progress = viewModel.playback != null
+        ? viewModel.playback!.position.inMilliseconds / viewModel.playback!.duration.inMilliseconds
+        : 0.0;
+
     return Stack(children: [
       Container(
         width: constraints.maxWidth * progress,
@@ -73,29 +77,31 @@ class _ProgressBarState extends State<ProgressBar> {
 
   bool wasPaused = false;
 
-  void handleSeekingStart(
-    PointerEvent event,
-    VideoPlayerViewModel videoPlayerViewModel,
-    PlayerViewModel playerViewModel,
-  ) {
-    wasPaused = videoPlayerViewModel.isPaused;
-    if (!videoPlayerViewModel.isPaused) {
-      playerViewModel.skipNextPlayPause();
-      videoPlayerViewModel.pause();
+  void handleSeekingStart(PointerEvent event, PlayerViewModel viewModel) {
+    wasPaused = viewModel.isPaused;
+    if (!viewModel.isPaused) {
+      viewModel.playPauseResolver.skipNextPlayPause();
+      viewModel.videoPlayerController.pause();
     }
-    handleSeeking(event, videoPlayerViewModel);
+    handleSeeking(event, viewModel);
   }
 
-  void handleSeeking(PointerEvent event, VideoPlayerViewModel videoPlayerViewModel) {
+  void handleSeeking(PointerEvent event, PlayerViewModel viewModel) {
     final width = progressBarContext.size!.width;
     final progress = (event.localPosition.dx - extraHitboxSize / 2) / width;
-    videoPlayerViewModel.seek(progress);
+
+    if (viewModel.playback == null) return;
+
+    final clampedProgress = clampDouble(progress, 0, 1);
+    final newPosition = viewModel.playback!.duration * clampedProgress;
+    viewModel.playback!.position = newPosition;
+    viewModel.videoPlayerController.setPosition(newPosition);
   }
 
-  void handleSeekStop(VideoPlayerViewModel videoPlayerViewModel, PlayerViewModel playerViewModel) {
+  void handleSeekStop(PlayerViewModel viewModel) {
     if (!wasPaused) {
-      playerViewModel.skipNextPlayPause();
-      videoPlayerViewModel.play();
+      viewModel.playPauseResolver.skipNextPlayPause();
+      viewModel.videoPlayerController.play();
     }
   }
 }

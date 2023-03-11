@@ -1,24 +1,18 @@
 import 'dart:async';
 
 import 'package:dreamscenter/device_info.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
-import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
+import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:flutter/foundation.dart';
 
 class OverlayHider extends ChangeNotifier {
-  bool _showOverlay = true;
-
-  bool get showOverlay => _showOverlay;
-
   final PlayerViewModel _playerViewModel;
-  final VideoPlayerViewModel _videoPlayerViewModel;
   late final StreamSubscription<void> _pauseOrPlaySubscription;
   Timer? _hideOverlayTimer;
 
-  OverlayHider(this._playerViewModel, this._videoPlayerViewModel);
+  OverlayHider(this._playerViewModel);
 
   void init() {
-    _pauseOrPlaySubscription = _videoPlayerViewModel.pauseOrPlayEvents.listen((_) => _updateOverlay());
+    _pauseOrPlaySubscription = _playerViewModel.isPausedStream.listen((_) => _updateOverlay());
   }
 
   @override
@@ -30,8 +24,8 @@ class OverlayHider extends ChangeNotifier {
 
   void onPlayerTapDown() {
     if (isInTouchMode()) {
-      if (_showOverlay) {
-        _setShowOverlay(false);
+      if (_playerViewModel.showOverlay) {
+        _playerViewModel.showOverlay = false;
       } else {
         _updateOverlay();
       }
@@ -45,22 +39,16 @@ class OverlayHider extends ChangeNotifier {
   }
 
   void _updateOverlay() {
-    _setShowOverlay(true);
-
+    _playerViewModel.showOverlay = true;
+    
     _hideOverlayTimer?.cancel();
 
-    if (_videoPlayerViewModel.isPaused || _playerViewModel.openedPopup != null) {
+    if (_playerViewModel.isPaused || _playerViewModel.openedPopup != null) {
       return;
     }
 
     _hideOverlayTimer = Timer(Duration(seconds: isInDesktopMode() ? 1 : 5), () {
-      _setShowOverlay(false);
+      _playerViewModel.showOverlay = false;
     });
-  }
-
-  void _setShowOverlay(bool newValue) {
-    bool shouldNotifyListeners = newValue != _showOverlay;
-    _showOverlay = newValue;
-    if (shouldNotifyListeners) notifyListeners();
   }
 }

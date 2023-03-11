@@ -23,6 +23,7 @@ linter:
   # producing the lint.
   rules:
     avoid_web_libraries_in_flutter: false
+    no_logic_in_create_state: false
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

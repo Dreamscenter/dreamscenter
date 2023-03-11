@@ -1,6 +1,5 @@
 import 'package:dreamscenter/default_colors.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
-import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
+import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class _SourcePopupState extends State<SourcePopup> {
 
   @override
   Widget build(BuildContext context) {
-    final videoPlayerViewModel = context.read<VideoPlayerViewModel>();
+    final viewModel = context.read<PlayerViewModel>();
     return SizedBox(
       width: 400,
       child: Column(
@@ -37,7 +36,7 @@ class _SourcePopupState extends State<SourcePopup> {
           OutlinedButton(
             onPressed: () {
               final url = textController.text;
-              videoPlayerViewModel.setSource(url);
+              viewModel.source = url;
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: DefaultColors.primaryDark,
