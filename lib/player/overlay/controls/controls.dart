@@ -3,8 +3,7 @@ import 'package:dreamscenter/player/overlay/controls/source/source_control.dart'
 import 'package:dreamscenter/player/overlay/controls/volume/volume_control.dart';
 import 'package:dreamscenter/player/overlay/controls/fullscreen_button.dart';
 import 'package:dreamscenter/player/overlay/controls/play_pause_button.dart';
-import 'package:dreamscenter/player/overlay/controls/watch_together/watch_together_control.dart';
-import 'package:dreamscenter/player/watch_together.dart';
+import 'package:dreamscenter/player/overlay/controls/watch_together_control.dart';
 import 'package:flutter/material.dart';
 
 class Controls extends StatelessWidget {

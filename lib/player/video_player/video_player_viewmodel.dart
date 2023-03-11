@@ -8,6 +8,7 @@ class VideoPlayerViewModel extends ChangeNotifier {
   bool _isPaused = true;
   double _volume = 1.0;
   double _speed = 1.0;
+  String? _source;
   late VideoPlayerController _controller;
   VideoPlayback? playback;
 
@@ -43,6 +44,11 @@ class VideoPlayerViewModel extends ChangeNotifier {
     _speed = newSpeed;
     notifyListeners();
   }
+  
+  void onSourceChanged(String? newSource) {
+    _source = newSource;
+    notifyListeners();
+  }
 
   void provideController(VideoPlayerController controller) {
     _controller = controller;
@@ -53,6 +59,8 @@ class VideoPlayerViewModel extends ChangeNotifier {
   double get volume => _volume;
 
   double get speed => _speed;
+  
+  String? get source => _source;
 
   Future<void> pause() => _controller.pause();
 
@@ -67,6 +75,8 @@ class VideoPlayerViewModel extends ChangeNotifier {
   Future<void> setVolume(double newVolume) => _controller.setVolume(newVolume);
 
   Future<void> setSpeed(double newSpeed) => _controller.setSpeed(newSpeed);
+  
+  Future<void> setSource(String newSource) => _controller.setSource(newSource);
 
   Future<void> switchPause() async {
     if (isPaused) {

@@ -43,10 +43,7 @@ class _PlayerState extends State<Player> {
                     switchFullscreen();
                   }
                 },
-                child: VideoPlayer(
-                  source: playerViewModel.source,
-                  viewModel: videoPlayerViewModel,
-                ),
+                child: VideoPlayer(viewModel: videoPlayerViewModel),
               ),
               EnhancedAnimatedOpacity(
                 opacity: playerViewModel.showOverlay ? 1 : 0,

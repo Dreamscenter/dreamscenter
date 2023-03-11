@@ -1,5 +1,4 @@
 import 'package:dreamscenter/extensions/num_extension.dart';
-import 'package:dreamscenter/player/player_viewmodel.dart';
 import 'package:dreamscenter/player/video_player/video_player_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -9,9 +8,8 @@ class WatchTogether {
   bool _isConnected = false;
   late final WebSocketChannel _channel;
   final VideoPlayerViewModel _videoPlayerViewModel;
-  final PlayerViewModel _playerViewModel;
 
-  WatchTogether(this._videoPlayerViewModel, this._playerViewModel);
+  WatchTogether(this._videoPlayerViewModel);
 
   void connect() {
     if (_isConnected) return;
@@ -32,7 +30,7 @@ class WatchTogether {
       _videoPlayerViewModel.play();
       _videoPlayerViewModel.setPosition(packet.position);
     } else if (packet is SetSource) {
-      _playerViewModel.source = packet.source;
+      _videoPlayerViewModel.setSource(packet.source);
     }
   }
 

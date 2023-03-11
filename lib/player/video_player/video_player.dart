@@ -8,12 +8,10 @@ import 'package:flutter/material.dart';
 import 'shims/dart_ui.dart' as ui;
 
 class VideoPlayer extends StatefulWidget {
-  final String? source;
   final VideoPlayerViewModel viewModel;
 
   const VideoPlayer({
     super.key,
-    required this.source,
     required this.viewModel,
   });
 
@@ -41,28 +39,29 @@ class _VideoPlayerState extends State<VideoPlayer> {
     video.addEventListener('loadedmetadata', (event) => widget.viewModel.onDurationChanged(video.duration.seconds));
     video.addEventListener('volumechange', (event) => widget.viewModel.onVolumeChanged(video.volume.toDouble()));
     video.addEventListener('ratechange', (event) => widget.viewModel.onSpeedChanged(video.playbackRate.toDouble()));
+
     widget.viewModel.provideController(VideoPlayerController(
       pause: () async => ifPlaying(video.pause),
       play: () async => ifPlaying(video.play),
       setPosition: (newPosition) async => ifPlaying(() => video.currentTime = newPosition.inSeconds.toDouble()),
-      setVolume: (volume) async => video.volume = volume,
-      setSpeed: (speed) async => video.playbackRate = speed,
+      setVolume: (newVolume) async => video.volume = newVolume,
+      setSpeed: (newSpeed) async => video.playbackRate = newSpeed,
+      setSource: (newSource) async {
+        final nonNullSource = newSource ?? '';
+        final sourceChanged = nonNullSource != video.src;
+        video.src = newSource ?? '';
+        if (sourceChanged) {
+          widget.viewModel.onSourceChanged(newSource);
+        }
+      },
     ));
 
     ui.platformViewRegistry.registerViewFactory('videoPlayer', (int viewId) => video);
   }
 
   void ifPlaying(Function() function) {
-    if (widget.source != null) {
+    if (widget.viewModel.source != null) {
       function();
-    }
-  }
-
-  @override
-  void didUpdateWidget(VideoPlayer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (video.src != widget.source) {
-      video.src = widget.source ?? '';
     }
   }
 

@@ -11,18 +11,6 @@ class PlayerViewModel extends ChangeNotifier {
 
   PlayerViewModel(this._videoPlayerViewModel);
 
-  String? _source;
-
-  String? get source => _source;
-
-  set source(String? newValue) {
-    _source = newValue;
-    if (newValue != null) {
-      watchTogether.setSource(newValue);
-    }
-    notifyListeners();
-  }
-
   ControlPopup? _openedPopup;
 
   ControlPopup? get openedPopup => _openedPopup;
@@ -49,7 +37,7 @@ class PlayerViewModel extends ChangeNotifier {
 
     initialized = true;
 
-    watchTogether = WatchTogether(_videoPlayerViewModel, this);
+    watchTogether = WatchTogether(_videoPlayerViewModel);
 
     _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
     _videoPlayerViewModel.pauseOrPlayEvents.listen((_) {

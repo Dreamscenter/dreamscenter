@@ -22,9 +22,7 @@ class _WatchTogetherControlState extends State<WatchTogetherControl> {
       icon: FaIcon(FontAwesomeIcons.userGroup, color: color),
       onTap: () {
         playerViewModel.watchTogether.connect();
-        setState(() {
-          color = Colors.green;
-        });
+        setState(() => color = Colors.green);
       },
       extraHitboxSize: 24,
     );
