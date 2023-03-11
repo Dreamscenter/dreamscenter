@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
+import 'package:dreamscenter/player/overlay/overlay_hider.dart';
 import 'package:dreamscenter/player/play_pause_resolver.dart';
 import 'package:dreamscenter/player/video_player/video_player_controller.dart';
 import 'package:dreamscenter/player/watch_together.dart';
@@ -15,21 +16,23 @@ class PlayerViewModel extends ChangeNotifier {
   ControlPopup? _openedPopup;
   bool _showOverlay = true;
   VideoPlayback? playback;
-  
+
   final StreamController<void> pauseEventsController = StreamController.broadcast();
   final StreamController<void> playEventsController = StreamController.broadcast();
   final StreamController<bool> _isPausedStreamController = StreamController.broadcast();
   final StreamController<String?> _sourceStreamController = StreamController.broadcast();
-  
+
   late VideoPlayerController videoPlayerController;
   late final WatchTogether watchTogether;
   late final PlayPauseResolver playPauseResolver;
+  late final OverlayHider overlayHider;
 
   PlayerViewModel();
 
   void init() {
     watchTogether = WatchTogether(this);
     playPauseResolver = PlayPauseResolver(this);
+    overlayHider = OverlayHider(this);
   }
 
   @override

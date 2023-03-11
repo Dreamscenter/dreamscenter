@@ -96,6 +96,7 @@ class _ProgressBarState extends State<ProgressBar> {
     final newPosition = viewModel.playback!.duration * clampedProgress;
     viewModel.playback!.position = newPosition;
     viewModel.videoPlayerController.setPosition(newPosition);
+    viewModel.overlayHider.updateOverlay();
   }
 
   void handleSeekStop(PlayerViewModel viewModel) {

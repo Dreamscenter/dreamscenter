@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
-import 'package:flutter/foundation.dart';
 
-class OverlayHider extends ChangeNotifier {
+class OverlayHider {
   final PlayerViewModel _playerViewModel;
   late final StreamSubscription<void> _pauseOrPlaySubscription;
   Timer? _hideOverlayTimer;
@@ -12,12 +11,10 @@ class OverlayHider extends ChangeNotifier {
   OverlayHider(this._playerViewModel);
 
   void init() {
-    _pauseOrPlaySubscription = _playerViewModel.isPausedStream.listen((_) => _updateOverlay());
+    _pauseOrPlaySubscription = _playerViewModel.isPausedStream.listen((_) => updateOverlay());
   }
 
-  @override
   void dispose() {
-    super.dispose();
     _pauseOrPlaySubscription.cancel();
     _hideOverlayTimer?.cancel();
   }
@@ -27,16 +24,18 @@ class OverlayHider extends ChangeNotifier {
       if (_playerViewModel.showOverlay) {
         _playerViewModel.showOverlay = false;
       } else {
-        _updateOverlay();
+        updateOverlay();
       }
     }
   }
 
   void onMouseMovement() {
-    _updateOverlay();
+    if (isInDesktopMode()) {
+      updateOverlay();
+    }
   }
 
-  void _updateOverlay() {
+  void updateOverlay() {
     _playerViewModel.showOverlay = true;
 
     _hideOverlayTimer?.cancel();
