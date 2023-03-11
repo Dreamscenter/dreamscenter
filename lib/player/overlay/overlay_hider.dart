@@ -33,14 +33,12 @@ class OverlayHider extends ChangeNotifier {
   }
 
   void onMouseMovement() {
-    if (isInDesktopMode()) {
-      _updateOverlay();
-    }
+    _updateOverlay();
   }
 
   void _updateOverlay() {
     _playerViewModel.showOverlay = true;
-    
+
     _hideOverlayTimer?.cancel();
 
     if (_playerViewModel.isPaused || _playerViewModel.openedPopup != null) {
