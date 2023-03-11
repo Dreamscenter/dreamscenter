@@ -17,6 +17,9 @@ class PlayerViewModel extends ChangeNotifier {
 
   set source(String? newValue) {
     _source = newValue;
+    if (newValue != null) {
+      watchTogether.setSource(newValue);
+    }
     notifyListeners();
   }
 
@@ -34,7 +37,7 @@ class PlayerViewModel extends ChangeNotifier {
   bool initialized = false;
 
   bool skipNext = false;
-  
+
   void init() {
     if (initialized) throw StateError('Already initialized');
 
@@ -46,7 +49,7 @@ class PlayerViewModel extends ChangeNotifier {
 
     initialized = true;
 
-    watchTogether = WatchTogether(_videoPlayerViewModel);
+    watchTogether = WatchTogether(_videoPlayerViewModel, this);
 
     _playPauseResolver.init(_videoPlayerViewModel, notifyListeners);
     _videoPlayerViewModel.pauseOrPlayEvents.listen((_) {
