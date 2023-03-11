@@ -23,7 +23,7 @@ class _WatchTogetherControlState extends State<WatchTogetherControl> {
       onTap: () {
         playerViewModel.watchTogether.connect();
         setState(() {
-          color = Colors.red;
+          color = Colors.green;
         });
       },
       extraHitboxSize: 24,
