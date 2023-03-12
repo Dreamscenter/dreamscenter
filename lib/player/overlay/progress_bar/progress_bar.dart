@@ -74,13 +74,7 @@ class _ProgressBarState extends State<ProgressBar> {
     );
   }
 
-  bool wasPaused = false;
-
   void handleSeekingStart(PointerEvent event, PlayerController playerController, OverlayHider overlayHider) {
-    wasPaused = playerController.isPaused;
-    if (!playerController.isPaused) {
-      playerController.pause();
-    }
     handleSeeking(event, playerController, overlayHider);
   }
 
@@ -91,9 +85,5 @@ class _ProgressBarState extends State<ProgressBar> {
     overlayHider.updateOverlay();
   }
 
-  void handleSeekStop(PlayerController playerController) {
-    if (!wasPaused) {
-      playerController.play();
-    }
-  }
+  void handleSeekStop(PlayerController playerController) {}
 }
