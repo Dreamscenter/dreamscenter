@@ -39,9 +39,9 @@ class PauseAt extends WatchTogetherPacket {
 
   @override
   ByteData toBytes() {
-    return ByteData(10)
+    return ByteData(9)
       ..setUint8(0, id)
-      ..setFloat64(2, position.inMilliseconds / 1000.0);
+      ..setFloat64(1, position.inMilliseconds / 1000.0);
   }
 }
 
@@ -59,10 +59,10 @@ class PlayAt extends WatchTogetherPacket {
 
   @override
   ByteData toBytes() {
-    return ByteData(10)
+    return ByteData(17)
       ..setUint8(0, id)
-      ..setInt64(2, timestamp.millisecondsSinceEpoch)
-      ..setFloat64(10, position.inMilliseconds / 1000.0);
+      ..setUint64(1, timestamp.millisecondsSinceEpoch)
+      ..setFloat64(9, position.inMilliseconds / 1000.0);
   }
 }
 
@@ -77,9 +77,9 @@ class SetSource extends WatchTogetherPacket {
 
   @override
   ByteData toBytes() {
-    return ByteData(2 + source.length)
+    return ByteData(1 + source.length)
       ..setUint8(0, id)
-      ..buffer.asUint8List(2).setAll(0, utf8.encode(source));
+      ..buffer.asUint8List(1).setAll(0, utf8.encode(source));
   }
 }
 
@@ -94,8 +94,8 @@ class SetPosition extends WatchTogetherPacket {
 
   @override
   ByteData toBytes() {
-    return ByteData(10)
+    return ByteData(9)
       ..setUint8(0, id)
-      ..setFloat64(2, position.inMilliseconds / 1000.0);
+      ..setFloat64(1, position.inMilliseconds / 1000.0);
   }
 }
