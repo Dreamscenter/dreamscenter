@@ -85,7 +85,7 @@ class WatchTogether {
   }
 
   Future<void> play() async {
-    final timestamp = DateTime.now().add(const Duration(milliseconds: 100));
+    final timestamp = DateTime.now().add(const Duration(milliseconds: 500));
     final position = _playerController.playback!.position;
     _sendPacket(PlayAt(timestamp: timestamp, position: position));
     await _playAt(timestamp, position);
@@ -93,7 +93,7 @@ class WatchTogether {
 
   Future<void> _playAt(DateTime timestamp, Duration position) async {
     if (timestamp.isBefore(DateTime.now())) {
-      if (kDebugMode) print('Received late packet');
+      if (kDebugMode) print('Received packet late by ${DateTime.now().difference(timestamp)}');
       await _viewModel.videoPlayerController.play();
     } else {
       final delay = timestamp.difference(DateTime.now());
