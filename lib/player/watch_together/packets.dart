@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dreamscenter/extensions/num_extension.dart';
+import 'package:dreamscenter/extensions/string_extension.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class WatchTogetherPacket {
@@ -54,14 +55,14 @@ class PlayAt extends WatchTogetherPacket {
   PlayAt({required this.timestamp, required this.position});
 
   PlayAt.fromBytes(ByteData bytes)
-      : timestamp = DateTime.fromMillisecondsSinceEpoch(bytes.getUint64W(1)),
+      : timestamp = DateTime.fromMillisecondsSinceEpoch(bytes.getUint64S(1)),
         position = bytes.getFloat64(9).seconds;
 
   @override
   ByteData toBytes() {
     return ByteData(17)
       ..setUint8(0, id)
-      ..setUint64W(1, timestamp.millisecondsSinceEpoch)
+      ..setUint64S(1, timestamp.millisecondsSinceEpoch)
       ..setFloat64(9, position.inMilliseconds / 1000.0);
   }
 }
@@ -101,18 +102,19 @@ class SetPosition extends WatchTogetherPacket {
 }
 
 extension on ByteData {
-  void setUint64W(int byteOffset, int value) {
-    final low = value & 0xFFFFFFFF;
-    final high = (value >> 32) & 0xFFFFFFFF;
+  void setUint64S(int byteOffset, int value) {
+    final valueAsString = value.toString();
+    final low = int.parse(valueAsString.takeLast(8));
+    final high = int.parse(valueAsString.take(valueAsString.length - 8));
 
     setUint32(byteOffset, low);
     setUint32(byteOffset + 4, high);
   }
 
-  int getUint64W(int byteOffset) {
+  int getUint64S(int byteOffset) {
     final low = getUint32(byteOffset);
     final high = getUint32(byteOffset + 4);
 
-    return low | (high << 32);
+    return int.parse('$high$low');
   }
 }
