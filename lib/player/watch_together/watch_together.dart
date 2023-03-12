@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
@@ -94,7 +93,7 @@ class WatchTogether {
 
   Future<void> _playAt(DateTime timestamp, Duration position) async {
     if (timestamp.isBefore(DateTime.now())) {
-      log('Received late packet');
+      if (kDebugMode) print('Received late packet');
       await _viewModel.videoPlayerController.play();
     } else {
       final delay = timestamp.difference(DateTime.now());
