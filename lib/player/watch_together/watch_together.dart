@@ -95,9 +95,9 @@ class WatchTogether {
     if (timestamp.isBefore(DateTime.now())) {
       await _viewModel.videoPlayerController.play();
     } else {
+      print('will play at $timestamp');
       _viewModel.videoPlayerController.setPosition(position);
       final delay = timestamp.difference(DateTime.now());
-      print('will play at $timestamp');
       await Future.delayed(delay, () async {
         _skipNextSeek = true;
         print('started playing at ${DateTime.now()}');
