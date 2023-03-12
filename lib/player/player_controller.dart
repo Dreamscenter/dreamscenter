@@ -32,7 +32,12 @@ class PlayerController extends ChangeNotifier {
 
   Future<void> play() async {
     if (playback == null) return;
-    await viewModel.videoPlayerController.play();
+
+    if (viewModel.watchTogetherSession == null) {
+      await viewModel.videoPlayerController.play();
+    } else {
+      await viewModel.watchTogetherSession!.play();
+    }
   }
 
   Future<void> setPosition(Duration newPosition) async {

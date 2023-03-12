@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/video_player/video_player_controller.dart';
+import 'package:dreamscenter/player/watch_together/watch_together.dart';
 import 'package:flutter/widgets.dart';
 
 class PlayerViewModel extends ChangeNotifier {
@@ -14,6 +15,7 @@ class PlayerViewModel extends ChangeNotifier {
   bool _showMobileControls = false;
   ControlPopup? _openedPopup;
   bool _showOverlay = true;
+  WatchTogether? watchTogetherSession;
 
   final StreamController<void> _pauseEventsController = StreamController.broadcast();
   final StreamController<void> _playEventsController = StreamController.broadcast();
@@ -122,5 +124,7 @@ class PlayerViewModel extends ChangeNotifier {
     _pauseEventsController.close();
     _playEventsController.close();
     _isPausedStreamController.close();
+    _sourceStreamController.close();
+    watchTogetherSession?.dispose();
   }
 }

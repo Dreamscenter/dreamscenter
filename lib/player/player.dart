@@ -5,7 +5,6 @@ import 'package:dreamscenter/player/overlay/player_overlay.dart';
 import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:dreamscenter/player/video_player/video_player.dart';
-import 'package:dreamscenter/player/watch_together.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
@@ -20,8 +19,7 @@ class Player extends StatefulWidget {
     final playerViewModel = PlayerViewModel();
     final overlayHider = OverlayHider(playerViewModel);
     final playerController = PlayerController(playerViewModel);
-    final watchTogether = WatchTogether(playerController);
-    return _PlayerState(playerViewModel, overlayHider, playerController, watchTogether);
+    return _PlayerState(playerViewModel, overlayHider, playerController);
   }
 }
 
@@ -29,9 +27,8 @@ class _PlayerState extends State<Player> {
   PlayerViewModel viewModel;
   OverlayHider overlayHider;
   PlayerController controller;
-  WatchTogether watchTogether;
 
-  _PlayerState(this.viewModel, this.overlayHider, this.controller, this.watchTogether);
+  _PlayerState(this.viewModel, this.overlayHider, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,6 @@ class _PlayerState extends State<Player> {
       providers: [
         ChangeNotifierProvider.value(value: viewModel),
         ChangeNotifierProvider.value(value: controller),
-        Provider.value(value: watchTogether),
         Provider.value(value: overlayHider),
       ],
       child: Consumer<PlayerViewModel>(builder: (_, __, ___) {
@@ -105,6 +101,5 @@ class _PlayerState extends State<Player> {
     super.dispose();
     viewModel.dispose();
     overlayHider.dispose();
-    watchTogether.dispose();
   }
 }
