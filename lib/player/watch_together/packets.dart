@@ -54,15 +54,15 @@ class PlayAt extends WatchTogetherPacket {
   PlayAt({required this.timestamp, required this.position});
 
   PlayAt.fromBytes(ByteData bytes)
-      : timestamp = DateTime.fromMillisecondsSinceEpoch(bytes.getUint64(1)),
-        position = bytes.getFloat64(9).seconds;
+      : timestamp = DateTime.fromMillisecondsSinceEpoch(bytes.getUint32(1)),
+        position = bytes.getFloat64(5).seconds;
 
   @override
   ByteData toBytes() {
     return ByteData(17)
       ..setUint8(0, id)
-      ..setUint64(1, timestamp.millisecondsSinceEpoch)
-      ..setFloat64(9, position.inMilliseconds / 1000.0);
+      ..setUint32(1, timestamp.millisecondsSinceEpoch)
+      ..setFloat64(5, position.inMilliseconds / 1000.0);
   }
 }
 
