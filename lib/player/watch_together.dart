@@ -31,7 +31,7 @@ class WatchTogether {
         _skipNextPause = false;
         return;
       }
-      _pauseAt(_playerController.playback!.duration);
+      _pauseAt(_playerController.playback!.position);
     }));
 
     _subscriptions.add(_playerController.playEvents.listen((_) {
