@@ -86,8 +86,9 @@ class WatchTogether {
 
   Future<void> play() async {
     final timestamp = DateTime.now().add(const Duration(milliseconds: 50));
-    _sendPacket(PlayAt(timestamp: timestamp, position: _playerController.playback!.position));
-    await _playAt(timestamp, _playerController.playback!.position);
+    final position = _playerController.playback!.position;
+    _sendPacket(PlayAt(timestamp: timestamp, position: position));
+    await _playAt(timestamp, position);
   }
 
   Future<void> _playAt(DateTime timestamp, Duration position) async {
