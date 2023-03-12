@@ -25,7 +25,7 @@ class WatchTogether {
       Uri.parse('wss://api.dreamscenter.app/watch-together/4faf717c-f3dd-43e9-85a7-20bb2d6096ce'),
     );
     _channel.stream.listen((message) {
-      _handlePacket(WatchTogetherPacket.fromBytes(ByteData.view(message)));
+      _handlePacket(WatchTogetherPacket.fromBytes(ByteData.view(message.buffer)));
     });
 
     _subscriptions.add(_playerController.pauseEvents.listen((_) {
