@@ -97,7 +97,7 @@ class WatchTogether {
       if (kDebugMode) print('Received packet late by ${DateTime.now().difference(timestamp)}');
       await _viewModel.videoPlayerController.play();
     } else {
-      final delay = timestamp.difference(DateTime.now());
+      final delay = DateTime.now().difference(timestamp);
       await Future.delayed(delay, () async {
         // _skipNextSeek = true;
         // await _viewModel.videoPlayerController.setPosition(position);
