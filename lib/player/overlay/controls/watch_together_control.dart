@@ -1,4 +1,3 @@
-import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/controls/control.dart';
 import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
@@ -15,19 +14,17 @@ class WatchTogetherControl extends StatefulWidget {
 }
 
 class _WatchTogetherControlState extends State<WatchTogetherControl> {
-  Color color = DefaultColors.primaryDark;
-
   @override
   Widget build(BuildContext context) {
     final playerController = context.read<PlayerController>();
-    final viewModel = context.read<PlayerViewModel>();
+    final viewModel = context.watch<PlayerViewModel>();
 
     return Control(
-      icon: FaIcon(FontAwesomeIcons.userGroup, color: color),
+      icon: FaIcon(FontAwesomeIcons.userGroup, color: viewModel.watchTogetherColor),
       onTap: () {
         viewModel.watchTogetherSession = WatchTogether(playerController, viewModel);
         viewModel.watchTogetherSession!.connect();
-        setState(() => color = Colors.green);
+        viewModel.watchTogetherColor = Colors.green;
       },
       extraHitboxSize: 24,
     );

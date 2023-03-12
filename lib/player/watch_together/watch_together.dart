@@ -4,6 +4,7 @@ import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:dreamscenter/player/watch_together/packets.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WatchTogether {
@@ -29,6 +30,8 @@ class WatchTogether {
     });
 
     _subscriptions.add(_playerController.pauseEvents.listen((_) {
+      _viewModel.watchTogetherColor = Colors.green;
+      
       if (_skipNextPause) {
         _skipNextPause = false;
         return;
@@ -67,8 +70,6 @@ class WatchTogether {
   }
 
   void _handlePacket(WatchTogetherPacket packet) async {
-    if (kDebugMode) print('Received packet: $packet');
-
     if (packet is PauseAt) {
       _skipNextPause = true;
       await _playerController.pause();
@@ -100,6 +101,7 @@ class WatchTogether {
       await Future.delayed(delay, () async {
         // _skipNextSeek = true;
         // await _viewModel.videoPlayerController.setPosition(position);
+        _viewModel.watchTogetherColor = Colors.blue;
         await _viewModel.videoPlayerController.play();
       });
     }

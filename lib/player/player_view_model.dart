@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/controls/control_popup.dart';
 import 'package:dreamscenter/player/video_player/video_player_controller.dart';
 import 'package:dreamscenter/player/watch_together/watch_together.dart';
@@ -16,6 +17,14 @@ class PlayerViewModel extends ChangeNotifier {
   ControlPopup? _openedPopup;
   bool _showOverlay = true;
   WatchTogether? watchTogetherSession;
+  Color _watchTogetherColor = DefaultColors.primaryDark;
+
+  Color get watchTogetherColor => _watchTogetherColor;
+
+  set watchTogetherColor(Color color) {
+    _watchTogetherColor = color;
+    notifyListeners();
+  }
 
   final StreamController<void> _pauseEventsController = StreamController.broadcast();
   final StreamController<void> _playEventsController = StreamController.broadcast();
