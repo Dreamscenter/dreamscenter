@@ -62,6 +62,16 @@ class PlayerController extends ChangeNotifier {
       await pause();
     }
   }
+
+  Stream<void> get pauseEvents => viewModel.pauseEvents;
+
+  Stream<void> get playEvents => viewModel.playEvents;
+
+  Stream<void> get seekEvents => viewModel.seekEventsController.stream;
+
+  Stream<bool> get isPausedStream => viewModel.isPausedStream;
+
+  Stream<String?> get sourceStream => viewModel.sourceStream;
 }
 
 class VideoPlayback {

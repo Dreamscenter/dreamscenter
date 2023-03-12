@@ -38,24 +38,25 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
     video.addEventListener('pause', (event) {
       viewModel.isPaused = true;
-      viewModel.pauseEventsController.add(null);
     });
     video.addEventListener('play', (event) {
       viewModel.isPaused = false;
-      viewModel.playEventsController.add(null);
     });
-    video.addEventListener('timeupdate', (event) {
+    video.addEventListener('timeupdate', (_) {
       viewModel.position = video.currentTime.seconds;
     });
-    video.addEventListener('loadedmetadata', (event) {
+    video.addEventListener('loadedmetadata', (_) {
       viewModel.position = video.currentTime.seconds;
       viewModel.duration = video.duration.seconds;
     });
-    video.addEventListener('volumechange', (event) {
+    video.addEventListener('volumechange', (_) {
       viewModel.volume = video.volume.toDouble();
     });
-    video.addEventListener('ratechange', (event) {
+    video.addEventListener('ratechange', (_) {
       viewModel.speed = video.playbackRate.toDouble();
+    });
+    video.addEventListener('seek', (_) {
+      viewModel.seekEventsController.add(null);
     });
 
     widget.viewModel.videoPlayerController = VideoPlayerController(
@@ -65,7 +66,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
       setVolume: (newVolume) async => video.volume = newVolume,
       setSpeed: (newSpeed) async => video.playbackRate = newSpeed,
     );
-    
+
     sourceSubscription = viewModel.sourceStream.listen((newSource) {
       video.src = newSource ?? '';
     });

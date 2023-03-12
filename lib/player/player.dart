@@ -20,7 +20,7 @@ class Player extends StatefulWidget {
     final playerViewModel = PlayerViewModel();
     final overlayHider = OverlayHider(playerViewModel);
     final playerController = PlayerController(playerViewModel);
-    final watchTogether = WatchTogether(playerViewModel);
+    final watchTogether = WatchTogether(playerController);
     return _PlayerState(playerViewModel, overlayHider, playerController, watchTogether);
   }
 }
@@ -105,5 +105,6 @@ class _PlayerState extends State<Player> {
     super.dispose();
     viewModel.dispose();
     overlayHider.dispose();
+    watchTogether.dispose();
   }
 }

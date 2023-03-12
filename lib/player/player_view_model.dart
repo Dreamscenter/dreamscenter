@@ -15,8 +15,9 @@ class PlayerViewModel extends ChangeNotifier {
   ControlPopup? _openedPopup;
   bool _showOverlay = true;
 
-  final StreamController<void> pauseEventsController = StreamController.broadcast();
-  final StreamController<void> playEventsController = StreamController.broadcast();
+  final StreamController<void> _pauseEventsController = StreamController.broadcast();
+  final StreamController<void> _playEventsController = StreamController.broadcast();
+  final StreamController<void> seekEventsController = StreamController.broadcast();
   final StreamController<bool> _isPausedStreamController = StreamController.broadcast();
   final StreamController<String?> _sourceStreamController = StreamController.broadcast();
 
@@ -48,6 +49,11 @@ class PlayerViewModel extends ChangeNotifier {
     if (valueChanged) {
       notifyListeners();
       _isPausedStreamController.add(newValue);
+      if (_isPaused) {
+        _pauseEventsController.add(null);
+      } else {
+        _playEventsController.add(null);
+      }
     }
   }
 
@@ -102,9 +108,9 @@ class PlayerViewModel extends ChangeNotifier {
     if (valueChanged) notifyListeners();
   }
 
-  Stream<void> get pauseEvents => pauseEventsController.stream;
+  Stream<void> get pauseEvents => _pauseEventsController.stream;
 
-  Stream<void> get playEvents => playEventsController.stream;
+  Stream<void> get playEvents => _playEventsController.stream;
 
   Stream<bool> get isPausedStream => _isPausedStreamController.stream;
 
@@ -113,8 +119,8 @@ class PlayerViewModel extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    pauseEventsController.close();
-    playEventsController.close();
+    _pauseEventsController.close();
+    _playEventsController.close();
     _isPausedStreamController.close();
   }
 }
