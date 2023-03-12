@@ -66,12 +66,12 @@ class WatchTogether {
     _channel.sink.add(packet.toBytes());
   }
 
-  void _handlePacket(WatchTogetherPacket packet) {
+  void _handlePacket(WatchTogetherPacket packet) async {
     if (kDebugMode) print('Received packet: $packet');
 
     if (packet is PauseAt) {
       _skipNextPause = true;
-      _playerController.pause();
+      await _playerController.pause();
       _playerController.setPosition(packet.position);
     } else if (packet is PlayAt) {
       _playAt(packet.timestamp, packet.position);
@@ -98,8 +98,8 @@ class WatchTogether {
     } else {
       final delay = timestamp.difference(DateTime.now());
       await Future.delayed(delay, () async {
-        _skipNextSeek = true;
-        await _viewModel.videoPlayerController.setPosition(position);
+        // _skipNextSeek = true;
+        // await _viewModel.videoPlayerController.setPosition(position);
         await _viewModel.videoPlayerController.play();
       });
     }
