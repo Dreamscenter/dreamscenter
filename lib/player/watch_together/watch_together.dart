@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
@@ -85,7 +86,7 @@ class WatchTogether {
   }
 
   Future<void> play() async {
-    final timestamp = DateTime.now().add(const Duration(milliseconds: 50));
+    final timestamp = DateTime.now().add(const Duration(milliseconds: 100));
     final position = _playerController.playback!.position;
     _sendPacket(PlayAt(timestamp: timestamp, position: position));
     await _playAt(timestamp, position);
@@ -93,16 +94,14 @@ class WatchTogether {
 
   Future<void> _playAt(DateTime timestamp, Duration position) async {
     if (timestamp.isBefore(DateTime.now())) {
+      log('Received late packet');
       await _viewModel.videoPlayerController.play();
     } else {
-      print('will play at $timestamp');
-      _viewModel.videoPlayerController.setPosition(position);
       final delay = timestamp.difference(DateTime.now());
       await Future.delayed(delay, () async {
         _skipNextSeek = true;
-        print('started playing at ${DateTime.now()}');
+        await _viewModel.videoPlayerController.setPosition(position);
         await _viewModel.videoPlayerController.play();
-        print('finished playing at ${DateTime.now()}');
       });
     }
   }
