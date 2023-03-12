@@ -99,8 +99,8 @@ class WatchTogether {
     } else {
       final delay = DateTime.now().difference(timestamp);
       await Future.delayed(delay, () async {
-        // _skipNextSeek = true;
-        // await _viewModel.videoPlayerController.setPosition(position);
+        _skipNextSeek = true;
+        await _viewModel.videoPlayerController.setPosition(position);
         _viewModel.watchTogetherColor = Colors.blue;
         await _viewModel.videoPlayerController.play();
       });
