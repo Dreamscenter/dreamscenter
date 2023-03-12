@@ -60,8 +60,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
     });
 
     widget.viewModel.videoPlayerController = VideoPlayerController(
-      pause: () async => video.pause,
-      play: () async => video.play,
+      pause: () async => video.pause(),
+      play: () async => video.play(),
       setPosition: (newPosition) async => video.currentTime = newPosition.inSeconds.toDouble(),
       setVolume: (newVolume) async => video.volume = newVolume,
       setSpeed: (newSpeed) async => video.playbackRate = newSpeed,
