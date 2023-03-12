@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:dreamscenter/default_colors.dart';
+import 'package:dreamscenter/player/overlay/overlay_hider.dart';
 import 'package:dreamscenter/player/overlay/progress_bar/progress_indicator.dart';
-import 'package:dreamscenter/player/player_view_model.dart';
+import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/util.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
 import 'package:flutter/widgets.dart';
@@ -21,11 +20,13 @@ class _ProgressBarState extends State<ProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<PlayerViewModel>();
+    final playerController = context.watch<PlayerController>();
+    final overlayHider = context.read<OverlayHider>();
+
     return InteractionDetector(
-        onTapDown: (event) => handleSeekingStart(event, viewModel),
-        onDrag: (event) => handleSeeking(event, viewModel),
-        onTapUp: (_) => handleSeekStop(viewModel),
+        onTapDown: (event) => handleSeekingStart(event, playerController, overlayHider),
+        onDrag: (event) => handleSeeking(event, playerController, overlayHider),
+        onTapUp: (_) => handleSeekStop(playerController),
         showClickCursor: true,
         extraHitboxSize: extraHitboxSize,
         child: LayoutBuilder(builder: (context, constraints) {
@@ -34,16 +35,14 @@ class _ProgressBarState extends State<ProgressBar> {
             height: 12,
             child: Stack(children: [
               background(context),
-              mediaProgress(context, constraints, viewModel),
+              mediaProgress(context, constraints, playerController),
             ]),
           );
         }));
   }
 
-  Widget mediaProgress(BuildContext context, BoxConstraints constraints, PlayerViewModel viewModel) {
-    final progress = viewModel.playback != null
-        ? viewModel.playback!.position.inMilliseconds / viewModel.playback!.duration.inMilliseconds
-        : 0.0;
+  Widget mediaProgress(BuildContext context, BoxConstraints constraints, PlayerController playerController) {
+    final progress = playerController.playback?.progress ?? 0;
 
     return Stack(children: [
       Container(
@@ -77,32 +76,24 @@ class _ProgressBarState extends State<ProgressBar> {
 
   bool wasPaused = false;
 
-  void handleSeekingStart(PointerEvent event, PlayerViewModel viewModel) {
-    wasPaused = viewModel.isPaused;
-    if (!viewModel.isPaused) {
-      viewModel.playPauseResolver.skipNextPlayPause();
-      viewModel.videoPlayerController.pause();
+  void handleSeekingStart(PointerEvent event, PlayerController playerController, OverlayHider overlayHider) {
+    wasPaused = playerController.isPaused;
+    if (!playerController.isPaused) {
+      playerController.pause();
     }
-    handleSeeking(event, viewModel);
+    handleSeeking(event, playerController, overlayHider);
   }
 
-  void handleSeeking(PointerEvent event, PlayerViewModel viewModel) {
+  void handleSeeking(PointerEvent event, PlayerController playerController, OverlayHider overlayHider) {
     final width = progressBarContext.size!.width;
     final progress = (event.localPosition.dx - extraHitboxSize / 2) / width;
-
-    if (viewModel.playback == null) return;
-
-    final clampedProgress = clampDouble(progress, 0, 1);
-    final newPosition = viewModel.playback!.duration * clampedProgress;
-    viewModel.playback!.position = newPosition;
-    viewModel.videoPlayerController.setPosition(newPosition);
-    viewModel.overlayHider.updateOverlay();
+    playerController.setProgress(progress);
+    overlayHider.updateOverlay();
   }
 
-  void handleSeekStop(PlayerViewModel viewModel) {
+  void handleSeekStop(PlayerController playerController) {
     if (!wasPaused) {
-      viewModel.playPauseResolver.skipNextPlayPause();
-      viewModel.videoPlayerController.play();
+      playerController.play();
     }
   }
 }

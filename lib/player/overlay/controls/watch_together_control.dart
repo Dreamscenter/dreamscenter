@@ -1,6 +1,6 @@
 import 'package:dreamscenter/default_colors.dart';
 import 'package:dreamscenter/player/overlay/controls/control.dart';
-import 'package:dreamscenter/player/player_view_model.dart';
+import 'package:dreamscenter/player/watch_together.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +17,11 @@ class _WatchTogetherControlState extends State<WatchTogetherControl> {
 
   @override
   Widget build(BuildContext context) {
-    final playerViewModel = context.read<PlayerViewModel>();
+    final watchTogether = context.read<WatchTogether>();
     return Control(
       icon: FaIcon(FontAwesomeIcons.userGroup, color: color),
       onTap: () {
-        playerViewModel.watchTogether.connect();
+        watchTogether.connect();
         setState(() => color = Colors.green);
       },
       extraHitboxSize: 24,

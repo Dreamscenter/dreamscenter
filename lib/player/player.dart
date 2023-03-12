@@ -2,8 +2,10 @@ import 'package:dreamscenter/device_info.dart';
 import 'package:dreamscenter/player/fullscreen/fullscreen.dart';
 import 'package:dreamscenter/player/overlay/overlay_hider.dart';
 import 'package:dreamscenter/player/overlay/player_overlay.dart';
+import 'package:dreamscenter/player/player_controller.dart';
 import 'package:dreamscenter/player/player_view_model.dart';
 import 'package:dreamscenter/player/video_player/video_player.dart';
+import 'package:dreamscenter/player/watch_together.dart';
 import 'package:dreamscenter/widgets/enhanced_animated_opacity.dart';
 import 'package:dreamscenter/widgets/enhanced_mouse_region/enhanced_mouse_region.dart';
 import 'package:dreamscenter/widgets/interaction_detector.dart';
@@ -17,21 +19,28 @@ class Player extends StatefulWidget {
   State<Player> createState() {
     final playerViewModel = PlayerViewModel();
     final overlayHider = OverlayHider(playerViewModel);
-    return _PlayerState(playerViewModel, overlayHider);
+    final playerController = PlayerController(playerViewModel);
+    final watchTogether = WatchTogether(playerViewModel);
+    return _PlayerState(playerViewModel, overlayHider, playerController, watchTogether);
   }
 }
 
 class _PlayerState extends State<Player> {
   PlayerViewModel viewModel;
   OverlayHider overlayHider;
+  PlayerController controller;
+  WatchTogether watchTogether;
 
-  _PlayerState(this.viewModel, this.overlayHider);
+  _PlayerState(this.viewModel, this.overlayHider, this.controller, this.watchTogether);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: viewModel),
+        ChangeNotifierProvider.value(value: controller),
+        Provider.value(value: watchTogether),
+        Provider.value(value: overlayHider),
       ],
       child: Consumer<PlayerViewModel>(builder: (_, __, ___) {
         return InteractionDetector(
@@ -81,14 +90,13 @@ class _PlayerState extends State<Player> {
     }
 
     if (isInDesktopMode()) {
-      viewModel.switchPause();
+      controller.switchPause();
     }
   }
 
   @override
   void initState() {
     super.initState();
-    viewModel.init();
     overlayHider.init();
   }
 

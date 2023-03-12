@@ -37,17 +37,19 @@ class _VideoPlayerState extends State<VideoPlayer> {
       ..style.pointerEvents = 'none';
 
     video.addEventListener('pause', (event) {
-      viewModel.playPauseResolver.onPause();
+      viewModel.isPaused = true;
+      viewModel.pauseEventsController.add(null);
     });
     video.addEventListener('play', (event) {
-      viewModel.playPauseResolver.onPlay();
+      viewModel.isPaused = false;
+      viewModel.playEventsController.add(null);
     });
     video.addEventListener('timeupdate', (event) {
-      viewModel.playback?.position = video.currentTime.seconds;
+      viewModel.position = video.currentTime.seconds;
     });
     video.addEventListener('loadedmetadata', (event) {
-      viewModel.onPlaybackStart();
-      viewModel.playback!.duration = video.duration.seconds;
+      viewModel.position = video.currentTime.seconds;
+      viewModel.duration = video.duration.seconds;
     });
     video.addEventListener('volumechange', (event) {
       viewModel.volume = video.volume.toDouble();
@@ -57,16 +59,15 @@ class _VideoPlayerState extends State<VideoPlayer> {
     });
 
     widget.viewModel.videoPlayerController = VideoPlayerController(
-      pause: () async => ifPlaying(video.pause),
-      play: () async => ifPlaying(video.play),
-      setPosition: (newPosition) async => ifPlaying(() => video.currentTime = newPosition.inSeconds.toDouble()),
+      pause: () async => video.pause,
+      play: () async => video.play,
+      setPosition: (newPosition) async => video.currentTime = newPosition.inSeconds.toDouble(),
       setVolume: (newVolume) async => video.volume = newVolume,
       setSpeed: (newSpeed) async => video.playbackRate = newSpeed,
     );
     
     sourceSubscription = viewModel.sourceStream.listen((newSource) {
       video.src = newSource ?? '';
-      if (newSource == null) viewModel.onPlaybackStop();
     });
 
     ui.platformViewRegistry.registerViewFactory('videoPlayer', (int viewId) => video);
@@ -76,12 +77,6 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void dispose() {
     super.dispose();
     sourceSubscription?.cancel();
-  }
-
-  void ifPlaying(Function() function) {
-    if (widget.viewModel.source != null) {
-      function();
-    }
   }
 
   @override
