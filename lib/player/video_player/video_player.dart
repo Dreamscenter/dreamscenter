@@ -51,18 +51,19 @@ class _VideoPlayerState extends State<VideoPlayer> {
     });
     video.addEventListener('volumechange', (_) {
       viewModel.volume = video.volume.toDouble();
+      video.currentTime = video.currentTime.seconds.inMilliseconds / 1000;
     });
     video.addEventListener('ratechange', (_) {
       viewModel.speed = video.playbackRate.toDouble();
     });
-    video.addEventListener('seek', (_) {
+    video.addEventListener('seeked', (_) {
       viewModel.seekEventsController.add(null);
     });
 
     widget.viewModel.videoPlayerController = VideoPlayerController(
       pause: () async => video.pause(),
       play: () async => video.play(),
-      setPosition: (newPosition) async => video.currentTime = newPosition.inSeconds.toDouble(),
+      setPosition: (newPosition) async => video.currentTime = newPosition.inMilliseconds / 1000,
       setVolume: (newVolume) async => video.volume = newVolume,
       setSpeed: (newSpeed) async => video.playbackRate = newSpeed,
     );

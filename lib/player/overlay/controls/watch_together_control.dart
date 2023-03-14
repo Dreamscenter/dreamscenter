@@ -22,7 +22,7 @@ class _WatchTogetherControlState extends State<WatchTogetherControl> {
     return Control(
       icon: FaIcon(FontAwesomeIcons.userGroup, color: viewModel.watchTogetherColor),
       onTap: () {
-        viewModel.watchTogetherSession = WatchTogether(playerController, viewModel);
+        viewModel.watchTogetherSession = WatchTogether(playerController);
         viewModel.watchTogetherSession!.connect();
         viewModel.watchTogetherColor = Colors.green;
       },

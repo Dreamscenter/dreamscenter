@@ -14,8 +14,8 @@ abstract class WatchTogetherPacket {
       case PauseAt.id:
         return PauseAt.fromBytes(bytes);
 
-      case PlayAt.id:
-        return PlayAt.fromBytes(bytes);
+      case Play.id:
+        return Play.fromBytes(bytes);
 
       case SetSource.id:
         return SetSource.fromBytes(bytes);
@@ -46,24 +46,16 @@ class PauseAt extends WatchTogetherPacket {
   }
 }
 
-class PlayAt extends WatchTogetherPacket {
+class Play extends WatchTogetherPacket {
   static const id = 1;
 
-  final DateTime timestamp;
-  final Duration position;
+  Play();
 
-  PlayAt({required this.timestamp, required this.position});
-
-  PlayAt.fromBytes(ByteData bytes)
-      : timestamp = DateTime.fromMillisecondsSinceEpoch(bytes.getUint64S(1)),
-        position = bytes.getFloat64(9).seconds;
+  Play.fromBytes(ByteData bytes);
 
   @override
   ByteData toBytes() {
-    return ByteData(17)
-      ..setUint8(0, id)
-      ..setUint64S(1, timestamp.millisecondsSinceEpoch)
-      ..setFloat64(9, position.inMilliseconds / 1000.0);
+    return ByteData(1)..setUint8(0, id);
   }
 }
 
